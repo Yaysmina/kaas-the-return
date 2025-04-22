@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Idle Game</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div id="game-container">
+
+        <header class="game-header">
+            <!-- Game Title or Logo might go here -->
+            <h1>Game Title Placeholder</h1>
+            <!-- Resource displays often go in the header too -->
+            <div class="resource-display">
+                <!-- Resource elements will be added here later -->
+            </div>
+        </header>
+
+        <nav class="tab-navigation">
+            <!-- Tab buttons will be dynamically generated or hardcoded here -->
+            <!-- Example structure (you'll add actual buttons later): -->
+            <button class="tab-button active" data-tab="tab-main">Main</button>
+            <button class="tab-button" data-tab="tab-upgrades">Upgrades</button>
+            <button class="tab-button" data-tab="tab-settings">Settings</button>
+            <!-- Add more button placeholders as needed -->
+        </nav>
+
+        <main class="tab-content-area">
+            <!-- Content for each tab will go inside divs like these -->
+
+            <div id="tab-main" class="tab-pane active">
+                <!-- Main game area content (e.g., generators, manual actions) -->
+                <h2>Main Area</h2>
+                <p>Core game interactions will live here.</p>
+            </div>
+
+            <div id="tab-upgrades" class="tab-pane">
+                <!-- Upgrades content -->
+                <h2>Upgrades</h2>
+                <p>Purchase boosts and improvements here.</p>
+            </div>
+
+            <div id="tab-settings" class="tab-pane">
+                <!-- Settings content -->
+                <h2>Settings</h2>
+                <p>Options like save, load, reset, volume control.</p>
+            </div>
+
+            <!-- Add more tab-pane divs corresponding to tab buttons -->
+
+        </main>
+
+        <footer class="game-footer">
+            <!-- Version number, stats, or logs might go here -->
+            <p>Version 0.0.1</p>
+        </footer>
+
+    </div>
+
+    <!-- You will need JavaScript later to handle tab switching -->
+    <!-- <script src="script.js"></script> -->
+
+</body>
+</html>
