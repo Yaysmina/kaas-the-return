@@ -8,7 +8,7 @@ const game = {
     automation: {
         isAutoTapping: false,
         autoTapIntervalId: null,
-        autoTapSpeedMs: 500, // Auto-tap twice a second
+        autoTapSpeedMs: 1000 / 4, // Auto-taps at 4/s
     },
     cooldowns: {
         tapCooldownMs: 1000 / 15, // Prevent manual taps faster than 15/s
@@ -315,11 +315,11 @@ const game = {
     determineNextTimerDuration(queueSize) {
         switch (queueSize) {
             case 0: return 30;   // 30 seconds
-            case 1: return 120;  // 2 minutes
-            case 2: return 180;  // 3 minutes
-            case 3: return 300;  // 5 minutes
-            case 4: return 600;  // 10 minutes
-            default: return 600; // Handles queue size 5+
+            case 1: return 60;   // 1 minute
+            case 2: return 120;   // 2 minutes
+            case 3: return 180;   // 3 minutes
+            case 4: return 300;   // 5 minutes
+            default: return 300; // Handles queue size 5+
         }
     },
 
@@ -446,7 +446,7 @@ const game = {
         this.milkMarket.lastDadRequestAmount = milkRequest; // Store for next Dad
 
         const rewards = {
-            coins: 0, // Use 'coins' key matching spec
+            coins: 5, // Use 'coins' key matching spec
             cowCash: 5
         };
 
