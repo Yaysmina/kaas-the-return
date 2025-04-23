@@ -9,7 +9,7 @@ const game = {
         autoTapSpeedMs: 1000, // Auto-tap every 1 second (1000 ms)
     },
     cooldowns: {
-        tapCooldownMs: 50, // Prevent manual taps faster than 100ms
+        tapCooldownMs: 1000 / 15, // Prevent manual taps faster than 15/s
         lastManualTapTime: 0
     },
     // --- DOM Elements ---
