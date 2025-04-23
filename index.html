@@ -75,29 +75,38 @@
                     <p>Here will be the ability to make ripe milk.</p>
                 </div>
             </div>
-
             <!-- Business Tab -->
             <div id="tab-business" class="tab-pane">
                 <h2>Business</h2>
-                 <div id="business-milk-market">
+                <!-- MODIFIED/REPLACED SECTION START -->
+                <div id="business-milk-market">
                     <h3>Milk Market</h3>
-                    <p>Sell your Milk here.</p>
+                    <p>Sell your Milk to visiting Moms and Dads to earn Gold and Cow Cash.</p>
+                    <!-- Container for the customer list -->
+                    <div id="customer-queue">
+                        <!-- Customer entries will be added here by JavaScript -->
+                        <p><i>Loading customers...</i></p>
+                    </div>
+                    <!-- Display area for the arrival timer -->
+                    <p id="arrival-timer-display">Market Closed</p>
                 </div>
-                 <!-- HR associated with Cheese Corner -->
-                 <hr id="business-cheese-hr" class="subsection-hr-locked" data-unlock-condition="cows:3">
+                <!-- MODIFIED/REPLACED SECTION END -->
+
+                <!-- HR associated with Cheese Corner -->
+                <hr id="business-cheese-hr" class="subsection-hr-locked" data-unlock-condition="cows:3">
                 <!-- Cheese Corner Section -->
                 <div id="business-cheese-corner" class="subsection-locked" data-unlock-condition="cows:3">
                     <!-- This span is the ONLY thing visible when locked -->
-                     <span class="unlock-info subsection-unlock-info">Requires 3 Cows (Factory)</span>
-                     <!-- Content below is hidden when locked -->
+                    <span class="unlock-info subsection-unlock-info">Requires 3 Cows (Factory)</span>
+                    <!-- Content below is hidden when locked -->
                     <h3>Cheese Corner</h3>
                     <p>Sell Cheese here.</p>
                 </div>
-                 <!-- HR associated with Gourmet Goods -->
-                 <hr id="business-gourmet-hr" class="subsection-hr-locked" data-unlock-condition="cows:5">
+                <!-- HR associated with Gourmet Goods -->
+                <hr id="business-gourmet-hr" class="subsection-hr-locked" data-unlock-condition="cows:5">
                 <!-- Gourmet Goods Section -->
                 <div id="business-gourmet-goods" class="subsection-locked" data-unlock-condition="cows:5">
-                     <!-- This span is the ONLY thing visible when locked -->
+                    <!-- This span is the ONLY thing visible when locked -->
                     <span class="unlock-info subsection-unlock-info">Requires 5 Cows (Premium Production)</span>
                     <!-- Content below is hidden when locked -->
                     <h3>Gourmet Goods</h3>
@@ -155,9 +164,18 @@
             <!-- Changelog Tab -->
             <div id="tab-changelog" class="tab-pane">
                 <h2>Changelog</h2>
+                <div class="changelog-version">
+                    <h3>Version 0.2.0: Milk Market (Current)</h3>
+                    <ul>
+                        <li>Added the Milk Market</li>
+                        <li>Added Milk Moms</li>
+                        <li>Added Dairy Dads</li>
+                        <li>Doubled Auto-Tap speed</li>
+                    </ul>
+                </div>
     
                 <div class="changelog-version">
-                    <h3>Version 0.1.4: Changelog & Balancing (Current)</h3>
+                    <h3>Version 0.1.4: Changelog & Balancing</h3>
                     <ul>
                         <li>Added Changelog tab</li>
                         <li>Lowered Cow cost to 25</li>
@@ -206,7 +224,7 @@
         </main>
 
         <footer class="game-footer">
-            <p>Version 0.1.4 - Changelog & Balancing</p>
+            <p>Version 0.2.0 - Milk Market</p>
         </footer>
     </div>
     <script src="script.js"></script>

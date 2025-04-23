@@ -133,4 +133,89 @@ hr { border: none; border-top: 1px solid #eee; margin: 15px 0; }
     margin-bottom: 4px; /* Space between list items */
 }
 
-/* --- END OF FILE style.css --- */
+/* --- START OF FILE style.css ADDITIONS --- */
+
+/* Milk Market Specific Styles */
+#customer-queue {
+    border: 1px solid #eee;
+    padding: 10px;
+    background-color: #fdfdfd;
+    min-height: 50px; /* Ensure it has some height even when empty */
+    max-height: 280px; /* Limit height and allow scrolling if needed */
+    overflow-y: auto;
+    margin-top: 15px;
+    margin-bottom: 15px;
+    border-radius: 4px; /* Added radius */
+}
+
+/* Style for the placeholder text when queue is empty */
+#customer-queue > p > i {
+    color: #888;
+    font-style: italic;
+    display: block; /* Make it block to center potentially */
+    text-align: center;
+    padding: 10px 0;
+}
+
+
+.customer-entry {
+    padding: 10px 5px; /* Adjust padding */
+    /* border-bottom: 1px dashed #ddd; */ /* Replaced by hr */
+}
+
+.customer-entry p {
+    margin-bottom: 8px; /* Space between text and button */
+    line-height: 1.4; /* Adjust line height within entry */
+    color: #444; /* Slightly darker text for entries */
+    font-size: 0.95em; /* Slightly smaller font for details */
+}
+
+.customer-entry strong {
+    color: #333; /* Even darker for name/type */
+    font-size: 1.05em; /* Make name slightly larger */
+}
+
+.customer-entry .sell-milk-button {
+    padding: 6px 12px; /* Slightly smaller button */
+    font-size: 0.9em;
+    margin-top: 5px;
+    background-color: #337ab7; /* Bootstrap primary blue */
+    border: none;
+}
+.customer-entry .sell-milk-button:hover:not(:disabled) {
+     background-color: #286090;
+}
+.customer-entry .sell-milk-button:disabled {
+    background-color: #cccccc;
+    color: #666666;
+    cursor: not-allowed;
+    opacity: 0.7;
+}
+
+
+/* Style for the HR inside customer entry */
+.customer-hr {
+    border: none;
+    border-top: 1px dashed #ddd; /* Dashed line between customers */
+    margin: 15px 0 5px 0; /* Adjust spacing around HR */
+}
+
+/* Remove hr from the very last entry */
+.customer-entry:last-child .customer-hr {
+    display: none;
+}
+
+
+#arrival-timer-display {
+    margin-top: 10px; /* Reduced top margin */
+    font-weight: bold;
+    color: #555;
+    text-align: center;
+    padding: 10px; /* Increased padding */
+    background-color: #f0f0f0;
+    border: 1px solid #e0e0e0; /* Added subtle border */
+    border-radius: 4px;
+    font-size: 0.95em;
+}
+
+/* --- END OF FILE style.css ADDITIONS --- */
