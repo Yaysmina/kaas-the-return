@@ -1,7 +1,7 @@
 const game = {
     // --- Game State ---
-    resources: { gold: 50, cows: 0, rawMilk: 0, milk: 0, cowCash: 0, factoryFunds: 0 },
-    costs: { cow: 50, processMilk: 10 },
+    resources: { gold: 25, cows: 0, rawMilk: 0, milk: 0, cowCash: 0, factoryFunds: 0 },
+    costs: { cow: 25, processMilk: 10 },
     production: { tapsPerClick: 1, milkPerTapCycle: 1, tapsPerCycle: 20, currentTapsLeft: 10 },
     automation: {
         isAutoTapping: false,
