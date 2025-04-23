@@ -3,65 +3,159 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Idle Game</title>
+    <title>Kaas: The Return</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-
     <div id="game-container">
-
         <header class="game-header">
-            <!-- Game Title or Logo might go here -->
-            <h1>Game Title Placeholder</h1>
-            <!-- Resource displays often go in the header too -->
+            <h1>Kaas: The Return</h1>
             <div class="resource-display">
-                <!-- Resource elements will be added here later -->
+                <span class="resource">Gold: <span id="gold-display">0</span></span> |
+                <span class="resource">Cows: <span id="cows-display">0</span></span> |
+                <span class="resource">Milk: <span id="milk-display">0</span></span>
+                <span class="resource" id="cow-cash-resource-display" style="display: none;"> | Cow Cash: <span id="cow-cash-display">0</span></span>
+                <span class="resource" id="factory-funds-resource-display" style="display: none;"> | Factory Funds: <span id="factory-funds-display">0</span></span>
             </div>
         </header>
 
         <nav class="tab-navigation">
-            <!-- Tab buttons will be dynamically generated or hardcoded here -->
-            <!-- Example structure (you'll add actual buttons later): -->
-            <button class="tab-button active" data-tab="tab-main">Main</button>
-            <button class="tab-button" data-tab="tab-upgrades">Upgrades</button>
+            <button class="tab-button active" data-tab="tab-farm">Farm</button>
+            <button class="tab-button locked" data-tab="tab-business" data-unlock-condition="milk:3">
+                Business <span class="unlock-info">Unlock at 3 Milk</span>
+            </button>
+            <button class="tab-button locked" data-tab="tab-upgrades" data-unlock-condition="cowCash:10">
+                Upgrades <span class="unlock-info">Unlock at 10 Cow Cash</span>
+            </button>
+             <button class="tab-button locked" data-tab="tab-factory" data-unlock-condition="cows:3">
+                Factory <span class="unlock-info">Unlock at 3 Cows</span>
+            </button>
             <button class="tab-button" data-tab="tab-settings">Settings</button>
-            <!-- Add more button placeholders as needed -->
         </nav>
 
         <main class="tab-content-area">
-            <!-- Content for each tab will go inside divs like these -->
-
-            <div id="tab-main" class="tab-pane active">
-                <!-- Main game area content (e.g., generators, manual actions) -->
-                <h2>Main Area</h2>
-                <p>Core game interactions will live here.</p>
+            <!-- Farm Tab -->
+            <div id="tab-farm" class="tab-pane active">
+                <h2>Farm</h2>
+                <div id="farm-cow-caring">
+                    <h3>Cow Caring</h3>
+                    <p>You currently have <span id="cows-count-farm">0</span> cows.</p>
+                    <button id="buy-cow-button" class="action">Buy Cow</button>
+                    <span>Cost: <span id="cow-cost">50</span> Gold</span>
+                </div>
+                <!-- HR associated with Milk Making -->
+                <hr id="farm-milk-hr" class="subsection-hr-locked" data-unlock-condition="cows:1">
+                <!-- Milk Making Section -->
+                <div id="farm-milk-making" class="subsection-locked" data-unlock-condition="cows:1">
+                    <!-- This span is the ONLY thing visible when locked -->
+                    <span class="unlock-info subsection-unlock-info">Requires 1 Cow</span>
+                    <!-- Content below is hidden when locked -->
+                    <h3>Milk Making</h3>
+                    <p>Taps left: <span id="taps-left">0</span> / <span id="taps-total">0</span></p>
+                    <!-- Milk Buttons Container -->
+                    <div class="button-group">
+                        <button id="make-raw-milk-button" class="action" disabled>Milk your Cows</button>
+                        <button id="toggle-auto-tap-button" class="action auto-toggle-button" disabled>Auto-Tap Off</button>
+                    </div>
+                    <span>You will get <span id="cows-milk-yield">0</span> Raw Milk per cycle</span>
+                    <p>You have <span id="raw-milk-count">0</span> Raw Milk.</p>
+                    <button id="process-milk-button" class="action" disabled>Process Milk</button>
+                    <span>(Requires <span id="raw-milk-needed">10</span> Raw Milk)</span>
+                    <p>You have <span id="milk-count-farm">0</span> Milk.</p>
+                </div>
+                <!-- HR associated with Ripe Milk -->
+                 <hr id="farm-ripe-hr" class="subsection-hr-locked" data-unlock-condition="cows:5">
+                <!-- Ripe Milk Section -->
+                <div id="farm-ripe-milk" class="subsection-locked" data-unlock-condition="cows:5">
+                     <!-- This span is the ONLY thing visible when locked -->
+                    <span class="unlock-info subsection-unlock-info">Requires 5 Cows</span>
+                    <!-- Content below is hidden when locked -->
+                    <h3>Ripening Room</h3>
+                    <p>Here will be the ability to make ripe milk.</p>
+                </div>
             </div>
 
+            <!-- Business Tab -->
+            <div id="tab-business" class="tab-pane">
+                <h2>Business</h2>
+                 <div id="business-milk-market">
+                    <h3>Milk Market</h3>
+                    <p>Sell your Milk here.</p>
+                </div>
+                 <!-- HR associated with Cheese Corner -->
+                 <hr id="business-cheese-hr" class="subsection-hr-locked" data-unlock-condition="cows:3">
+                <!-- Cheese Corner Section -->
+                <div id="business-cheese-corner" class="subsection-locked" data-unlock-condition="cows:3">
+                    <!-- This span is the ONLY thing visible when locked -->
+                     <span class="unlock-info subsection-unlock-info">Requires 3 Cows (Factory)</span>
+                     <!-- Content below is hidden when locked -->
+                    <h3>Cheese Corner</h3>
+                    <p>Sell Cheese here.</p>
+                </div>
+                 <!-- HR associated with Gourmet Goods -->
+                 <hr id="business-gourmet-hr" class="subsection-hr-locked" data-unlock-condition="cows:5">
+                <!-- Gourmet Goods Section -->
+                <div id="business-gourmet-goods" class="subsection-locked" data-unlock-condition="cows:5">
+                     <!-- This span is the ONLY thing visible when locked -->
+                    <span class="unlock-info subsection-unlock-info">Requires 5 Cows</span>
+                    <!-- Content below is hidden when locked -->
+                    <h3>Gourmet Goods</h3>
+                    <p>Sell Premium Cheese here.</p>
+                </div>
+            </div>
+
+            <!-- Upgrades Tab -->
             <div id="tab-upgrades" class="tab-pane">
-                <!-- Upgrades content -->
                 <h2>Upgrades</h2>
-                <p>Purchase boosts and improvements here.</p>
+                 <div id="upgrades-cow-cash">
+                    <h3>Cow Cash</h3>
+                    <p>Upgrade cow and milk production.</p>
+                </div>
+                 <!-- HR associated with Factory Funds -->
+                 <hr id="upgrades-factory-hr" class="subsection-hr-locked" data-unlock-condition="cows:3">
+                <!-- Factory Funds Section -->
+                <div id="upgrades-factory-funds" class="subsection-locked" data-unlock-condition="cows:3">
+                     <!-- This span is the ONLY thing visible when locked -->
+                     <span class="unlock-info subsection-unlock-info">Requires 3 Cows (Factory)</span>
+                     <!-- Content below is hidden when locked -->
+                    <h3>Factory Funds</h3>
+                    <p>Upgrade factory efficiency.</p>
+                </div>
             </div>
 
+             <!-- Factory Tab -->
+            <div id="tab-factory" class="tab-pane">
+                <h2>Factory</h2>
+                <div id="factory-fresh">
+                    <h3>Fresh Factory</h3>
+                    <p>Process normal milk into cheese here.</p>
+                </div>
+                 <!-- HR associated with Premium Production -->
+                 <hr id="factory-premium-hr" class="subsection-hr-locked" data-unlock-condition="cows:5">
+                <!-- Premium Production Section -->
+                <div id="factory-premium-production" class="subsection-locked" data-unlock-condition="cows:5">
+                    <!-- This span is the ONLY thing visible when locked -->
+                    <span class="unlock-info subsection-unlock-info">Requires 5 Cows</span>
+                     <!-- Content below is hidden when locked -->
+                    <h3>Premium Production</h3>
+                    <p>Process ripe milk into premium cheese here.</p>
+                </div>
+            </div>
+
+            <!-- Settings Tab -->
             <div id="tab-settings" class="tab-pane">
-                <!-- Settings content -->
                 <h2>Settings</h2>
                 <p>Options like save, load, reset, volume control.</p>
+                <button class="action">Save Game</button>
+                <button class="action">Load Game</button>
+                <button class="action" style="background-color: #d9534f;">Reset Game</button>
             </div>
-
-            <!-- Add more tab-pane divs corresponding to tab buttons -->
-
         </main>
 
         <footer class="game-footer">
-            <!-- Version number, stats, or logs might go here -->
-            <p>Version 0.0.1</p>
+            <p>Version 0.1.4 - Auto Tap & Cooldown</p> <!-- Updated version -->
         </footer>
-
     </div>
-
-    <!-- You will need JavaScript later to handle tab switching -->
-    <!-- <script src="script.js"></script> -->
-
+    <script src="script.js"></script>
 </body>
 </html>
