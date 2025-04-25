@@ -8,6 +8,7 @@
 </head>
 <body>
     <div id="game-container">
+        <p id="playstyle-display" class="playstyle-indicator">Playstyle: Loading...</p>
         <header class="game-header">
             <h1>Kaas: The Return</h1>
             <div class="resource-display">
@@ -24,11 +25,11 @@
             <button class="tab-button locked" data-tab="tab-business" data-unlock-condition="milk:2">
                 Business <span class="unlock-info">Unlock at 2 Milk</span>
             </button>
-            <button class="tab-button locked" data-tab="tab-upgrades" data-unlock-condition="cowCash:10">
-                Upgrades <span class="unlock-info">Unlock at 10 Cow Cash</span>
+            <button class="tab-button locked" data-tab="tab-upgrades" data-unlock-condition="cowCash:15">
+                Upgrades <span class="unlock-info">Unlock at 15 Cow Cash</span>
             </button>
-             <button class="tab-button locked" data-tab="tab-factory" data-unlock-condition="cows:3">
-                Factory <span class="unlock-info">Unlock at 3 Cows</span>
+             <button class="tab-button locked" data-tab="tab-factory" data-unlock-condition="cows:4">
+                Factory <span class="unlock-info">Unlock at 4 Cows</span>
             </button>
             <button class="tab-button" data-tab="tab-settings">Settings</button>
             <button class="tab-button" data-tab="tab-changelog">Changelog</button>
@@ -40,9 +41,9 @@
                 <h2>Farm</h2>
                 <div id="farm-cow-caring">
                     <h3>Cow Caring</h3>
-                    <p>You currently have <span id="cows-count-farm">0</span> cows.</p>
+                    <p>You currently have <span id="cows-count-farm">0</span> cow(s).</p>
                     <button id="buy-cow-button" class="action">Buy Cow</button>
-                    <span>Cost: <span id="cow-cost">50</span> Gold</span>
+                    <span>Cost: <span id="effective-cow-cost-display">50</span> Gold</span>
                 </div>
                 <!-- HR associated with Milk Making -->
                 <hr id="farm-milk-hr" class="subsection-hr-locked" data-unlock-condition="cows:1">
@@ -52,7 +53,7 @@
                     <span class="unlock-info subsection-unlock-info">Requires 1 Cow</span>
                     <!-- Content below is hidden when locked -->
                     <h3>Milk Making</h3>
-                    <p>Taps left: <span id="taps-left">0</span> / <span id="taps-total">0</span></p>
+                    <p>Taps left: <span id="taps-left">0</span> / <span id="current-taps-per-cycle-display">0</span></p>
                     <!-- Milk Buttons Container -->
                     <div class="button-group">
                         <button id="make-raw-milk-button" class="action" disabled>Milk your Cows</button>
@@ -61,7 +62,7 @@
                     <span>You will get <span id="cows-milk-yield">0</span> Raw Milk per cycle</span>
                     <p>You have <span id="raw-milk-count">0</span> Raw Milk.</p>
                     <button id="process-milk-button" class="action" disabled>Process Milk</button>
-                    <span>(Requires <span id="raw-milk-needed">10</span> Raw Milk)</span>
+                    <span>(Requires <span id="effective-raw-milk-cost-display">10</span> Raw Milk)</span>
                     <p>You have <span id="milk-count-farm">0</span> Milk.</p>
                 </div>
                 <!-- HR associated with Ripe Milk -->
@@ -69,16 +70,16 @@
                 <!-- Ripe Milk Section -->
                 <div id="farm-ripe-milk" class="subsection-locked" data-unlock-condition="cows:5">
                      <!-- This span is the ONLY thing visible when locked -->
-                    <span class="unlock-info subsection-unlock-info">Requires 5 Cows</span>
+                    <span class="unlock-info subsection-unlock-info">Requires 7 Cows</span>
                     <!-- Content below is hidden when locked -->
                     <h3>Ripening Room</h3>
                     <p>Here will be the ability to make ripe milk.</p>
                 </div>
             </div>
+
             <!-- Business Tab -->
             <div id="tab-business" class="tab-pane">
                 <h2>Business</h2>
-                <!-- MODIFIED/REPLACED SECTION START -->
                 <div id="business-milk-market">
                     <h3>Milk Market</h3>
                     <p>Sell your Milk to visiting Moms and Dads to earn Gold and Cow Cash.</p>
@@ -90,14 +91,13 @@
                     <!-- Display area for the arrival timer -->
                     <p id="arrival-timer-display">Market Closed</p>
                 </div>
-                <!-- MODIFIED/REPLACED SECTION END -->
 
                 <!-- HR associated with Cheese Corner -->
                 <hr id="business-cheese-hr" class="subsection-hr-locked" data-unlock-condition="cows:3">
                 <!-- Cheese Corner Section -->
                 <div id="business-cheese-corner" class="subsection-locked" data-unlock-condition="cows:3">
                     <!-- This span is the ONLY thing visible when locked -->
-                    <span class="unlock-info subsection-unlock-info">Requires 3 Cows (Factory)</span>
+                    <span class="unlock-info subsection-unlock-info">Requires 4 Cows (Factory)</span>
                     <!-- Content below is hidden when locked -->
                     <h3>Cheese Corner</h3>
                     <p>Sell Cheese here.</p>
@@ -107,7 +107,7 @@
                 <!-- Gourmet Goods Section -->
                 <div id="business-gourmet-goods" class="subsection-locked" data-unlock-condition="cows:5">
                     <!-- This span is the ONLY thing visible when locked -->
-                    <span class="unlock-info subsection-unlock-info">Requires 5 Cows (Premium Production)</span>
+                    <span class="unlock-info subsection-unlock-info">Requires 7 Cows (Premium Production)</span>
                     <!-- Content below is hidden when locked -->
                     <h3>Gourmet Goods</h3>
                     <p>Sell Premium Cheese here.</p>
@@ -117,20 +117,66 @@
             <!-- Upgrades Tab -->
             <div id="tab-upgrades" class="tab-pane">
                 <h2>Upgrades</h2>
-                 <div id="upgrades-cow-cash">
+
+                <!-- Cow Cash Upgrades Section -->
+                <div id="upgrades-cow-cash"> <!-- Container for this currency type -->
                     <h3>Cow Cash</h3>
-                    <p>Upgrade cow and milk production.</p>
-                </div>
-                 <!-- HR associated with Factory Funds -->
-                 <hr id="upgrades-factory-hr" class="subsection-hr-locked" data-unlock-condition="cows:3">
-                <!-- Factory Funds Section -->
-                <div id="upgrades-factory-funds" class="subsection-locked" data-unlock-condition="cows:3">
-                     <!-- This span is the ONLY thing visible when locked -->
-                     <span class="unlock-info subsection-unlock-info">Requires 3 Cows (Factory)</span>
-                     <!-- Content below is hidden when locked -->
-                    <h3>Factory Funds</h3>
-                    <p>Upgrade factory efficiency.</p>
-                </div>
+                    <p>Spend Cow Cash to improve your farm's efficiency.</p>
+
+                    <!-- Grid container for the Cow Cash upgrade items -->
+                    <div class="upgrades-grid-container">
+
+                        <!-- Upgrade: Cow Cost Reduction -->
+                        <div class="upgrade-item">
+                            <h4>Cow Cost Reduction</h4>
+                            <p>Reduces the Gold cost of buying Cows.</p>
+                            <p>Level: <span id="upgrade-cow-cost-level">0</span>/<span id="upgrade-cow-cost-max-level">8</span></p>
+                            <p>Effect: <span id="upgrade-cow-cost-effect">100% Gold Cost</span></p>
+                            <p>Next Level Cost: <span id="upgrade-cow-cost-cost">? Cow Cash</span></p>
+                            <button id="upgrade-cow-cost-button" class="action upgrade-button" data-upgrade-type="cowCost">Purchase</button>
+                        </div>
+
+                        <!-- Upgrade: Raw Milk Tap Reduction -->
+                        <div class="upgrade-item">
+                            <h4>Tap Reduction</h4>
+                            <p>Reduces the number of taps needed per raw milk cycle.</p>
+                            <p>Level: <span id="upgrade-tap-reduction-level">0</span>/<span id="upgrade-tap-reduction-max-level">15</span></p>
+                            <p>Effect: <span id="upgrade-tap-reduction-effect">20 Taps per Cycle</span></p>
+                            <p>Next Level Cost: <span id="upgrade-tap-reduction-cost">? Cow Cash</span></p>
+                            <button id="upgrade-tap-reduction-button" class="action upgrade-button" data-upgrade-type="tapReduction">Purchase</button>
+                        </div>
+
+                        <!-- Upgrade: Milk Production Raw Milk Reduction -->
+                        <div class="upgrade-item">
+                            <h4>Raw Milk Reduction</h4>
+                            <p>Reduces the Raw Milk needed to process into Milk.</p>
+                            <p>Level: <span id="upgrade-raw-milk-reduction-level">0</span>/<span id="upgrade-raw-milk-reduction-max-level">5</span></p>
+                            <p>Effect: <span id="upgrade-raw-milk-reduction-effect">10 Raw Milk per Milk</span></p>
+                            <p>Next Level Cost: <span id="upgrade-raw-milk-reduction-cost">? Cow Cash</span></p>
+                            <button id="upgrade-raw-milk-reduction-button" class="action upgrade-button" data-upgrade-type="rawMilkReduction">Purchase</button>
+                        </div>
+
+                        <!-- Add any other Cow Cash upgrades here inside this container -->
+
+                    </div> <!-- End of upgrades-grid-container for Cow Cash -->
+                </div> <!-- End of upgrades-cow-cash section -->
+
+                <!-- Separator HR between Cow Cash section and the next section (e.g., Factory Funds) -->
+                <!-- This HR remains to separate major upgrade categories -->
+                <hr id="upgrades-factory-hr" class="subsection-hr-locked" data-unlock-condition="cows:4">
+
+                 <!-- Example Placeholder for the next upgrade section (e.g., Factory Funds) -->
+                 <!-- This section would appear BELOW the Cow Cash upgrades -->
+                 <!-- <div id="upgrades-factory-funds" class="subsection-locked" data-unlock-condition="cows:4"> -->
+                     <!-- <span class="subsection-unlock-info">Requires 4 Cows to unlock Factory upgrades.</span> -->
+                     <!-- <h3>Factory Funds</h3> -->
+                     <!-- <p>Spend Factory Funds to improve processing...</p> -->
+                     <!-- If factory upgrades should also be side-by-side, add another upgrades-grid-container here -->
+                     <!-- <div class="upgrades-grid-container"> -->
+                         <!-- Factory Fund upgrade items would go here -->
+                     <!-- </div> -->
+                 <!-- </div> -->
+
             </div>
 
              <!-- Factory Tab -->
@@ -145,7 +191,7 @@
                 <!-- Premium Production Section -->
                 <div id="factory-premium-production" class="subsection-locked" data-unlock-condition="cows:5">
                     <!-- This span is the ONLY thing visible when locked -->
-                    <span class="unlock-info subsection-unlock-info">Requires 5 Cows (Ripe Milk)</span>
+                    <span class="unlock-info subsection-unlock-info">Requires 7 Cows (Ripe Milk)</span>
                      <!-- Content below is hidden when locked -->
                     <h3>Premium Production</h3>
                     <p>Process ripe milk into premium cheese here.</p>
@@ -164,6 +210,21 @@
             <!-- Changelog Tab -->
             <div id="tab-changelog" class="tab-pane">
                 <h2>Changelog</h2>
+
+                <div class="changelog-version">
+                    <h3>Version 0.3.0: Cow Cash Upgrades</h3>
+                    <ul>
+                        <li>NEW: Cow Cash Upgrades</li>
+                        <li>NEW: The ability to choose a playstyle</li>
+                        <li>Milk amount scaling for Dairy Dads is less random</li>
+                        <li>Dairy Dads rewards now scale</li>
+                        <li>Dairy Dads appear more often</li>
+                        <li>Decreased customer wait time</li>
+                        <li>Increased Unlock Requirements</li>
+                        <li>Bugfix: "Sell x Milk" button now works properly</li>
+                    </ul>
+                </div>
+
                 <div class="changelog-version">
                     <h3>Version 0.2.1: Balance Changes</h3>
                     <ul>
@@ -176,9 +237,9 @@
                 <div class="changelog-version">
                     <h3>Version 0.2.0: Milk Market</h3>
                     <ul>
-                        <li>Added the Milk Market</li>
-                        <li>Added Milk Moms</li>
-                        <li>Added Dairy Dads</li>
+                        <li>NEW: the Milk Market</li>
+                        <li>NEW: Milk Moms</li>
+                        <li>NEW: Dairy Dads</li>
                         <li>Doubled Auto-Tap speed</li>
                     </ul>
                 </div>
@@ -196,8 +257,8 @@
                  <div class="changelog-version">
                     <h3>Version 0.1.3: Auto Tap & Cooldown</h3>
                     <ul>
-                        <li>Added Auto-Tap toggle button</li>
-                        <li>Added cooldown to manual "Milk your Cows" button to prevent spamming</li>
+                        <li>NEW: Auto-Tap toggle button</li>
+                        <li>Added cooldown to manual "Milk your Cows" button to prevent cheating</li>
                     </ul>
                 </div>
     
@@ -233,7 +294,7 @@
         </main>
 
         <footer class="game-footer">
-            <p>Version 0.2.1 - Balance Changes</p>
+            <p>Version 0.3.0 - Cow Cash Upgrades</p>
         </footer>
     </div>
     <script src="script.js"></script>

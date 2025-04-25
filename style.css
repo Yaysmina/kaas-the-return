@@ -1,5 +1,3 @@
-/* --- START OF FILE style.css --- */
-
 /* Basic Reset & Body Styling */
 * { box-sizing: border-box; margin: 0; padding: 0; }
 body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: 1.6; background-color: #f0f0f0; color: #333; display: flex; justify-content: center; padding-top: 20px; }
@@ -27,10 +25,10 @@ body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height
 
 /* Container for button groups */
 .button-group {
-    margin-bottom: 10px; /* Add space below the button group */
-    display: flex; /* Use flexbox for alignment */
+    margin-bottom: 10px;
+    display: flex;
     align-items: center; /* Vertically align items */
-    gap: 10px; /* Add space between buttons */
+    gap: 10px;
 }
 
 /* Style for the auto-tap toggle button */
@@ -133,8 +131,6 @@ hr { border: none; border-top: 1px solid #eee; margin: 15px 0; }
     margin-bottom: 4px; /* Space between list items */
 }
 
-/* --- START OF FILE style.css ADDITIONS --- */
-
 /* Milk Market Specific Styles */
 #customer-queue {
     border: 1px solid #eee;
@@ -218,4 +214,190 @@ hr { border: none; border-top: 1px solid #eee; margin: 15px 0; }
     font-size: 0.95em;
 }
 
-/* --- END OF FILE style.css ADDITIONS --- */
+/* --- NEW/MODIFIED Upgrade Item Styling --- */
+
+/* Container for the upgrade items */
+.upgrades-grid-container {
+    display: flex; /* Enable flexbox */
+    flex-wrap: wrap; /* Allow items to wrap to the next line */
+    gap: 15px; /* Add space between items (adjust value as needed) */
+    margin-bottom: 15px; /* Add some margin below the whole container */
+}
+
+/* Individual upgrade item styling */
+.upgrade-item {
+    /* Remove bottom margin, gap handles spacing */
+    margin-bottom: 0;
+    flex-basis: calc(33.33% - 10px); /* Example: ~2 items per row (50% minus half the gap) */
+    flex-grow: 1; /* Allows items to grow and fill space */
+    min-width: 200px; /* Prevent items from becoming too narrow */
+
+    /* Keep existing styles */
+    padding: 15px;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+    background-color: #f9f9f9;
+    box-sizing: border-box; /* Ensure padding/border are included in width */
+}
+
+
+.upgrade-item h4 {
+    margin-bottom: 8px;
+    color: #333;
+}
+
+.upgrade-item p {
+    margin-bottom: 5px; /* Tighter spacing within item */
+    font-size: 0.9em;
+    color: #555;
+}
+
+.upgrade-item p span { /* Style for the dynamic values */
+    font-weight: bold;
+    color: #222;
+}
+
+.upgrade-item .upgrade-button {
+    margin-top: 10px;
+    min-width: 100px; /* Give buttons a minimum width */
+    background-color: #5bc0de; /* Default: Info Blue */
+    border: none; /* Ensure no default borders interfere */
+    /* Inherit .action styles for transitions etc. */
+    padding: 8px 15px;
+    color: white;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.95em;
+    transition: background-color 0.2s ease, opacity 0.2s ease;
+    display: inline-block;
+    vertical-align: middle;
+}
+.upgrade-item .upgrade-button:hover:not(:disabled) {
+    background-color: #31b0d5;
+}
+
+/* Style for Max Level button */
+.upgrade-item .upgrade-button.max-level {
+    background-color: #f0ad4e; /* Warning orange */
+    color: white;
+    cursor: default; /* Indicate non-interactive */
+}
+.upgrade-item .upgrade-button.max-level:hover {
+     background-color: #ec971f; /* Slightly darker orange on hover */
+}
+
+/* Disabled state (ensure it overrides others if needed) */
+.upgrade-item .upgrade-button:disabled {
+    background-color: #cccccc !important; /* Use !important if specificity issues arise */
+    color: #666666 !important;
+    cursor: not-allowed !important;
+    opacity: 0.7 !important;
+}
+
+/* --- END OF NEW/MODIFIED Upgrade Item Styling --- */
+
+
+/* Playstyle Indicator (Above Header) */
+.playstyle-indicator {
+    text-align: center;
+    font-weight: bold;
+    padding: 8px 0;
+    background-color: #e0e0e0; /* Light grey background */
+    color: #333;
+    border-bottom: 1px solid #ccc;
+    margin-bottom: 0; /* Remove default margin if needed */
+    font-size: 0.9em;
+}
+
+/* Playstyle Selection Modal Styles */
+#playstyle-modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1000; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgba(0,0,0,0.6); /* Black w/ opacity */
+    justify-content: center;
+    align-items: center;
+}
+
+#playstyle-modal.active {
+    display: flex; /* Use flex to center content */
+}
+
+.playstyle-modal-content {
+    background-color: #fefefe;
+    margin: auto; /* Centered */
+    padding: 30px;
+    border: 1px solid #888;
+    width: 80%;
+    max-width: 500px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+    text-align: center;
+}
+
+.playstyle-modal-content h2 {
+    margin-top: 0;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+.playstyle-modal-content p {
+    margin-bottom: 15px;
+    color: #555;
+    line-height: 1.5;
+}
+
+.playstyle-option {
+    margin-bottom: 20px;
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+}
+
+.playstyle-option h3 {
+    margin-top: 0;
+    margin-bottom: 8px;
+    color: #444;
+}
+
+.playstyle-warning {
+    font-style: italic;
+    color: #d9534f; /* Warning red */
+    margin-top: 25px;
+    margin-bottom: 25px;
+    font-weight: bold;
+    border: 1px dashed #d9534f;
+    padding: 10px;
+    background-color: #fdf7f7;
+}
+
+.playstyle-select-button {
+    padding: 10px 20px;
+    font-size: 1.1em;
+    cursor: pointer;
+    border: none;
+    border-radius: 5px;
+    color: white;
+    transition: background-color 0.2s ease;
+    margin: 0 10px; /* Space buttons */
+}
+
+.playstyle-select-button.active-style {
+    background-color: #5cb85c; /* Green for Active */
+}
+.playstyle-select-button.active-style:hover {
+    background-color: #4cae4c;
+}
+
+.playstyle-select-button.passive-style {
+    background-color: #5bc0de; /* Blue for Passive */
+}
+.playstyle-select-button.passive-style:hover {
+    background-color: #46b8da;
+}
