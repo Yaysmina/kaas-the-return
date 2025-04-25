@@ -1298,89 +1298,88 @@ const game = {
 
     // --- Game Lifecycle (Save/Load/Reset stubs) ---
     saveGame() {
-        console.log("Saving game... (STUB)");
-        const saveData = {
-            resources: this.resources,
-            playstyle: this.playstyle, // <<< ADD
-            costs: { currentBaseCowCost: this.costs.currentBaseCowCost },
-            production: { currentTapsLeft: this.production.currentTapsLeft },
-            upgrades: this.upgrades, // Save upgrade levels
-            automation: { isAutoTapping: this.automation.isAutoTapping },
-            milkMarket: {
-                // Save relevant market state like customerSequence, lastDadRequestAmount
-                // Potentially save active customers if you want them to persist? (complex)
-                customerSequence: this.milkMarket.customerSequence,
-                lastDadRequestAmount: this.milkMarket.lastDadRequestAmount,
-                // Note: Saving timers precisely is tricky; often easier to restart on load
-            }
-            // ... other necessary state ...
-        };
-        // TODO: Implement actual saving (e.g., localStorage.setItem('kaasGameSave', JSON.stringify(saveData)))
-        alert("Save Game (Not Implemented Yet - Playstyle added to stub)");
+        // console.log("Saving game... (STUB)");
+        // const saveData = {
+        //     resources: this.resources,
+        //     playstyle: this.playstyle, // <<< ADD
+        //     costs: { currentBaseCowCost: this.costs.currentBaseCowCost },
+        //     production: { currentTapsLeft: this.production.currentTapsLeft },
+        //     upgrades: this.upgrades, // Save upgrade levels
+        //     automation: { isAutoTapping: this.automation.isAutoTapping },
+        //     milkMarket: {
+        //         // Save relevant market state like customerSequence, lastDadRequestAmount
+        //         // Potentially save active customers if you want them to persist? (complex)
+        //         customerSequence: this.milkMarket.customerSequence,
+        //         lastDadRequestAmount: this.milkMarket.lastDadRequestAmount,
+        //         // Note: Saving timers precisely is tricky; often easier to restart on load
+        //     }
+        //     // ... other necessary state ...
+        // };
+        // // TODO: Implement actual saving (e.g., localStorage.setItem('kaasGameSave', JSON.stringify(saveData)))
+        alert("Save Game (Not Implemented Yet)");
     },
 
     loadGame() {
-        console.log("Loading game... (STUB)");
-        // TODO: Implement actual loading (e.g., from localStorage)
-        const savedString = null; // Replace with actual loading mechanism
-        if (savedString) {
-            const loadedData = JSON.parse(savedString);
-            this.resources = loadedData.resources;
-            this.playstyle = loadedData.playstyle || null; // <<< LOAD (default to null if missing)
-            this.costs.currentBaseCowCost = loadedData.costs.currentBaseCowCost;
-            this.production.currentTapsLeft = loadedData.production.currentTapsLeft;
-            this.upgrades = loadedData.upgrades;
-            this.automation.isAutoTapping = loadedData.automation.isAutoTapping;
-            this.milkMarket.customerSequence = loadedData.milkMarket.customerSequence;
-            this.milkMarket.lastDadRequestAmount = loadedData.milkMarket.lastDadRequestAmount;
-            // ... load other state ...
+        // console.log("Loading game... (STUB)");
+        // // TODO: Implement actual loading (e.g., from localStorage)
+        // const savedString = null; // Replace with actual loading mechanism
+        // if (savedString) {
+        //     const loadedData = JSON.parse(savedString);
+        //     this.resources = loadedData.resources;
+        //     this.playstyle = loadedData.playstyle || null; // <<< LOAD (default to null if missing)
+        //     this.costs.currentBaseCowCost = loadedData.costs.currentBaseCowCost;
+        //     this.production.currentTapsLeft = loadedData.production.currentTapsLeft;
+        //     this.upgrades = loadedData.upgrades;
+        //     this.automation.isAutoTapping = loadedData.automation.isAutoTapping;
+        //     this.milkMarket.customerSequence = loadedData.milkMarket.customerSequence;
+        //     this.milkMarket.lastDadRequestAmount = loadedData.milkMarket.lastDadRequestAmount;
+        //     // ... load other state ...
 
-            console.log("Game data loaded. Applying states...");
+        //     console.log("Game data loaded. Applying states...");
 
-            // Re-apply states and check unlocks AFTER loading
-            this.updateProductionCostsFromUpgrades(); // Crucial after loading upgrades
-            this.applyPlaystyleEffects(); // Apply loaded playstyle effects
+        //     // Re-apply states and check unlocks AFTER loading
+        //     this.updateProductionCostsFromUpgrades(); // Crucial after loading upgrades
+        //     this.applyPlaystyleEffects(); // Apply loaded playstyle effects
 
-            // Re-initialize market logic if unlocked
-            const businessTab = document.querySelector('[data-tab="tab-business"]');
-            if (businessTab && !businessTab.classList.contains('locked')) {
-                this.cacheMilkMarketElements(); // Ensure elements are cached
-                this.addMarketEventListenersIfNeeded(); // Ensure listeners are attached
-                this.startMilkMarketLogic(); // Restart market timer
-            }
+        //     // Re-initialize market logic if unlocked
+        //     const businessTab = document.querySelector('[data-tab="tab-business"]');
+        //     if (businessTab && !businessTab.classList.contains('locked')) {
+        //         this.cacheMilkMarketElements(); // Ensure elements are cached
+        //         this.addMarketEventListenersIfNeeded(); // Ensure listeners are attached
+        //         this.startMilkMarketLogic(); // Restart market timer
+        //     }
 
-            // Restart auto-tap if it was saved as active
-            if (this.automation.isAutoTapping) {
-                this.automation.isAutoTapping = false; // Set to false first
-                this.toggleAutoTap(); // Then toggle to correctly start interval with loaded playstyle speed
-            }
+        //     // Restart auto-tap if it was saved as active
+        //     if (this.automation.isAutoTapping) {
+        //         this.automation.isAutoTapping = false; // Set to false first
+        //         this.toggleAutoTap(); // Then toggle to correctly start interval with loaded playstyle speed
+        //     }
 
-            this.checkUnlocks(); // Run unlocks check based on loaded state
-            this.updateDisplay(); // Update UI fully
+        //     this.checkUnlocks(); // Run unlocks check based on loaded state
+        //     this.updateDisplay(); // Update UI fully
 
-        } else {
-            alert("Load Game (No save data found)");
-        }
-        // Initial prompt handled by init if playstyle is null after load attempt
+        //
+        alert("Load Game (Not Implemented Yet)");
     },
 
     resetGame() {
-        console.log("Resetting game... (STUB)");
-        if (confirm("Are you sure you want to reset all progress? This cannot be undone!")) {
-            console.log("Proceeding with reset.");
-            // TODO: Implement full game reset
-            // Reset resources to initial values
-            // Reset playstyle to null to trigger prompt on reload
-            this.playstyle = null; // <<< RESET
-            // Reset upgrade levels to 0
-            // Object.keys(this.upgrades).forEach(key => this.upgrades[key].level = 0);
-            // Reset costs, production state, automation, market state...
-            alert("Reset Game (Not Implemented Yet - Refresh page for basic reset, playstyle reset added to stub)");
-            // Consider stopping timers before reload
-            // if (this.automation.autoTapIntervalId) clearInterval(this.automation.autoTapIntervalId);
-            // if (this.milkMarket.customerArrivalTimerId) clearInterval(this.milkMarket.customerArrivalTimerId);
-            window.location.reload(); // Simplest reset for now
-        }
+        // console.log("Resetting game... (STUB)");
+        // if (confirm("Are you sure you want to reset all progress? This cannot be undone!")) {
+        //     console.log("Proceeding with reset.");
+        //     // TODO: Implement full game reset
+        //     // Reset resources to initial values
+        //     // Reset playstyle to null to trigger prompt on reload
+        //     this.playstyle = null; // <<< RESET
+        //     // Reset upgrade levels to 0
+        //     // Object.keys(this.upgrades).forEach(key => this.upgrades[key].level = 0);
+        //     // Reset costs, production state, automation, market state...
+        //     alert("Reset Game (Not Implemented Yet - Refresh page for basic reset, playstyle reset added to stub)");
+        //     // Consider stopping timers before reload
+        //     // if (this.automation.autoTapIntervalId) clearInterval(this.automation.autoTapIntervalId);
+        //     // if (this.milkMarket.customerArrivalTimerId) clearInterval(this.milkMarket.customerArrivalTimerId);
+        //     window.location.reload(); // Simplest reset for now
+        // }
+        alert("Reset Game (Not Implemented Yet)");
     },
 };
 
