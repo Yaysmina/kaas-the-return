@@ -228,7 +228,7 @@ hr { border: none; border-top: 1px solid #eee; margin: 15px 0; }
 .upgrade-item {
     /* Remove bottom margin, gap handles spacing */
     margin-bottom: 0;
-    flex-basis: calc(33.33% - 10px); /* Example: ~2 items per row (50% minus half the gap) */
+    flex-basis: calc(50% - 8px); /* Example: ~2 items per row (50% minus half the gap) */
     flex-grow: 1; /* Allows items to grow and fill space */
     min-width: 200px; /* Prevent items from becoming too narrow */
 
@@ -400,4 +400,11 @@ hr { border: none; border-top: 1px solid #eee; margin: 15px 0; }
 }
 .playstyle-select-button.passive-style:hover {
     background-color: #46b8da;
+}
+
+.button-group {
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center; /* Vertically align items */
+    gap: 10px; /* This will space out the "Process Milk" and "Process All" buttons */
 }

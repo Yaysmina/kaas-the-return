@@ -66,8 +66,8 @@ const game = {
         cowsCountFarm: null, cowsMilkYield: null, rawMilkCount: null, milkCountFarm: null,
         tapsLeft: null, tapsTotal: null, cowCost: null, rawMilkNeeded: null,
         buyCowButton: null, makeRawMilkButton: null, processMilkButton: null, toggleAutoTapButton: null,
-        tabButtons: null, tabPanes: null, tabNav: null, effectiveCowCostDisplay: null,
-        currentTapsPerCycleDisplay: null, effectiveRawMilkCostDisplay: null,
+        processAllMilkButton: null, tabButtons: null, tabPanes: null, tabNav: null,
+        effectiveCowCostDisplay: null, currentTapsPerCycleDisplay: null, effectiveRawMilkCostDisplay: null,
         lockedSections: {}, lockedHrs: {},
 
         // Upgrade Tab Elements
@@ -131,6 +131,7 @@ const game = {
         this.elements.makeRawMilkButton = document.getElementById('make-raw-milk-button');
         this.elements.processMilkButton = document.getElementById('process-milk-button');
         this.elements.toggleAutoTapButton = document.getElementById('toggle-auto-tap-button');
+        this.elements.processAllMilkButton = document.getElementById('process-all-milk-button');
         this.elements.tabButtons = document.querySelectorAll('.tab-button');
         this.elements.tabPanes = document.querySelectorAll('.tab-pane');
         this.elements.tabNav = document.querySelector('.tab-navigation');
@@ -215,6 +216,10 @@ const game = {
         this.elements.makeRawMilkButton.addEventListener('click', () => this.handleManualTap());
         this.elements.processMilkButton.addEventListener('click', () => this.processMilk());
         this.elements.toggleAutoTapButton.addEventListener('click', () => this.toggleAutoTap());
+
+        if (this.elements.processAllMilkButton) { // Still good practice to check if it exists
+            this.elements.processAllMilkButton.addEventListener('click', () => this.processAllMilk());
+        }
 
         // Settings Buttons (Placeholder functionality)
         document.querySelector('#tab-settings .action:nth-of-type(1)').addEventListener('click', () => this.saveGame());
@@ -373,7 +378,41 @@ const game = {
         } else {
             console.log(`Need ${currentRawMilkCost} raw milk.`);
         }
-     },
+    },
+
+    processAllMilk() {
+        const milkSection = document.getElementById('farm-milk-making');
+        if (!milkSection || milkSection.classList.contains('subsection-locked')) {
+            console.log("Milk Making section is locked. Cannot process all.");
+            return;
+        }
+
+        const currentRawMilkCost = this.getCurrentRawMilkCost();
+
+        // Basic checks
+        if (currentRawMilkCost <= 0) {
+            console.error("Raw milk cost is zero or less, cannot process all.");
+            return;
+        }
+        if (this.resources.rawMilk <= 0) {
+            console.log("No raw milk to process.");
+            return;
+        }
+
+        // Calculate how many can be made
+        const maxProcessable = Math.floor(this.resources.rawMilk / currentRawMilkCost);
+
+        if (maxProcessable > 0) {
+            const totalRawMilkCost = maxProcessable * currentRawMilkCost;
+            this.resources.rawMilk -= totalRawMilkCost;
+            this.resources.milk += maxProcessable;
+            console.log(`Processed all available raw milk: ${totalRawMilkCost} Raw Milk -> ${maxProcessable} Milk.`);
+            this.updateDisplay();
+            this.checkUnlocks();
+        } else {
+            console.log(`Not enough raw milk (${this.resources.rawMilk}) to process even one unit (cost: ${currentRawMilkCost}).`);
+        }
+    },
 
     // --- Upgrade Purchase Logic ---
     purchaseUpgrade(type) {
@@ -490,23 +529,16 @@ const game = {
         if (this.milkMarket.customers.length >= this.milkMarket.maxCustomers) {
             return false;
         }
-        // Check type constraints implicitly handled in selectCustomerType,
-        // but an explicit check here makes logic clearer.
-        const currentMoms = this.milkMarket.customers.filter(c => c.type === 'mom').length;
-        const currentDads = this.milkMarket.customers.filter(c => c.type === 'dad').length;
-        const canAddMom = currentMoms < 3;
-        const canAddDad = currentDads < 2;
-
-        // Can we add *any* customer type?
-        return canAddMom || canAddDad;
+        return true;
     },
 
     selectCustomerType() {
+        const currentCustomers = this.milkMarket.customers.length;
         const currentMoms = this.milkMarket.customers.filter(c => c.type === 'mom').length;
         const currentDads = this.milkMarket.customers.filter(c => c.type === 'dad').length;
 
-        const canAddMom = currentMoms < 3;
-        const canAddDad = currentDads < 2;
+        const canAddMom = !(currentCustomers == 2 && currentMoms == 2); // If there are 2 customers and both Moms, a new Mom can't be added
+        const canAddDad = !(currentCustomers == 1 && currentDads == 1); // If there is only one customer which is a Dad, a new Dad can't be added
 
         if (!canAddMom && canAddDad) return 'dad'; // Only Dad possible
         if (canAddMom && !canAddDad) return 'mom'; // Only Mom possible
@@ -565,9 +597,9 @@ const game = {
         const milkRequest = Math.floor(Math.random() * (maxMilk - minMilk + 1)) + minMilk;
 
         const rewards = {
-            coins: 10 + milkRequest, // Use 'coins' key matching spec, map to 'gold' later
+            coins: 10 + Math.floor(milkRequest / 2), // Use 'coins' key matching spec, map to 'gold' later
             cowCash: 1
-        };
+        }; 
 
         return {
             id: `mom-${sequenceN}-${Date.now()}`, // Unique enough ID
@@ -592,23 +624,16 @@ const game = {
         } else {
             // Requires knowing the previous Dad's actual request amount
             const prevAmount = this.milkMarket.lastDadRequestAmount;
+            // There is a 70% chance that the Milk amount will be increased by 5
             const roll = Math.random();
-            if (roll < 0.40) { // 40% same
-                milkRequest = prevAmount;
-            } else if (roll < 0.80) { // 40% +5
-                milkRequest = prevAmount + 5;
-            } else if (roll < 0.95) { // 15% +10
-                milkRequest = prevAmount + 10;
-            } else { // 5% -5
-                milkRequest = prevAmount - 5;
-            }
-            milkRequest = Math.max(5, milkRequest); // Ensure >= 5
+            milkRequest = roll < 0.70 ? prevAmount + 5 : prevAmount;
+
         }
         this.milkMarket.lastDadRequestAmount = milkRequest; // Store for next Dad
 
         const rewards = {
-            coins: 5 + milkRequest/5, // Use 'coins' key matching spec
-            cowCash: 5 + milkRequest/5
+            coins: 5 + milkRequest / 5, // Use 'coins' key matching spec
+            cowCash: 5 + milkRequest / 5
         };
 
         return {
@@ -988,8 +1013,24 @@ const game = {
             this.elements.toggleAutoTapButton.textContent = this.automation.isAutoTapping ? 'Auto-Tap ON' : 'Auto-Tap Off';
             this.elements.toggleAutoTapButton.classList.toggle('active-auto', this.automation.isAutoTapping);
         }
+        const canProcessSingle = milkMakingUnlocked && this.resources.rawMilk >= currentEffectiveRawMilkCost;
+
         if (this.elements.processMilkButton) {
-            this.elements.processMilkButton.disabled = !milkMakingUnlocked || this.resources.rawMilk < currentEffectiveRawMilkCost;
+            this.elements.processMilkButton.disabled = !canProcessSingle;
+        }
+
+        // Check factory unlock status for visibility
+        const getFactoryTab = document.querySelector('[data-tab="tab-factory"]');
+        const isFactoryTabUnlocked = getFactoryTab && !getFactoryTab.classList.contains('locked');
+
+        if (this.elements.processAllMilkButton) {
+            // Visible only if factory is unlocked AND milk making section is unlocked
+            const isVisible = isFactoryTabUnlocked && milkMakingUnlocked;
+            this.elements.processAllMilkButton.style.display = isVisible ? 'inline-block' : 'none';
+
+            // Enabled state based on ability to process at least one (and section being unlocked)
+            // Same condition as the single process button is sufficient
+            this.elements.processAllMilkButton.disabled = !canProcessSingle;
         }
 
         // --- Update Upgrades Tab UI ---
@@ -1274,7 +1315,7 @@ const game = {
             const effectiveAutoTapSpeed = (this.playstyle === 'passive')
                 ? this.automation.baseAutoTapSpeedMs / 2
                 : this.automation.baseAutoTapSpeedMs;
-            this.automation.autoTapIntervalId = setInterval(() => this.tapCow(), effectiveAutoTapSpeed);
+            this.automation.autoTapIntervalId = setInterval(() => this.tapCow(manual = false), effectiveAutoTapSpeed);
         }
         // Manual tap effect is handled directly in tapCow based on current this.playstyle
     },

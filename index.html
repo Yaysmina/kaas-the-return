@@ -61,14 +61,17 @@
                     </div>
                     <span>You will get <span id="cows-milk-yield">0</span> Raw Milk per cycle</span>
                     <p>You have <span id="raw-milk-count">0</span> Raw Milk.</p>
-                    <button id="process-milk-button" class="action" disabled>Process Milk</button>
-                    <span>(Requires <span id="effective-raw-milk-cost-display">10</span> Raw Milk)</span>
+                    <div class="button-group">
+                        <button id="process-milk-button" class="action" disabled>Process Milk</button>
+                        <button id="process-all-milk-button" class="action" style="display: none;">Process All</button>
+                    </div>
+                    <span>(Requires <span id="effective-raw-milk-cost-display">10</span> Raw Milk for each Milk)</span>
                     <p>You have <span id="milk-count-farm">0</span> Milk.</p>
                 </div>
                 <!-- HR associated with Ripe Milk -->
-                 <hr id="farm-ripe-hr" class="subsection-hr-locked" data-unlock-condition="cows:5">
+                 <hr id="farm-ripe-hr" class="subsection-hr-locked" data-unlock-condition="cows:7">
                 <!-- Ripe Milk Section -->
-                <div id="farm-ripe-milk" class="subsection-locked" data-unlock-condition="cows:5">
+                <div id="farm-ripe-milk" class="subsection-locked" data-unlock-condition="cows:7">
                      <!-- This span is the ONLY thing visible when locked -->
                     <span class="unlock-info subsection-unlock-info">Requires 7 Cows</span>
                     <!-- Content below is hidden when locked -->
@@ -93,9 +96,9 @@
                 </div>
 
                 <!-- HR associated with Cheese Corner -->
-                <hr id="business-cheese-hr" class="subsection-hr-locked" data-unlock-condition="cows:3">
+                <hr id="business-cheese-hr" class="subsection-hr-locked" data-unlock-condition="cows:4">
                 <!-- Cheese Corner Section -->
-                <div id="business-cheese-corner" class="subsection-locked" data-unlock-condition="cows:3">
+                <div id="business-cheese-corner" class="subsection-locked" data-unlock-condition="cows:4">
                     <!-- This span is the ONLY thing visible when locked -->
                     <span class="unlock-info subsection-unlock-info">Requires 4 Cows (Factory)</span>
                     <!-- Content below is hidden when locked -->
@@ -103,9 +106,9 @@
                     <p>Sell Cheese here.</p>
                 </div>
                 <!-- HR associated with Gourmet Goods -->
-                <hr id="business-gourmet-hr" class="subsection-hr-locked" data-unlock-condition="cows:5">
+                <hr id="business-gourmet-hr" class="subsection-hr-locked" data-unlock-condition="cows:7">
                 <!-- Gourmet Goods Section -->
-                <div id="business-gourmet-goods" class="subsection-locked" data-unlock-condition="cows:5">
+                <div id="business-gourmet-goods" class="subsection-locked" data-unlock-condition="cows:7">
                     <!-- This span is the ONLY thing visible when locked -->
                     <span class="unlock-info subsection-unlock-info">Requires 7 Cows (Premium Production)</span>
                     <!-- Content below is hidden when locked -->
@@ -187,9 +190,9 @@
                     <p>Process normal milk into cheese here.</p>
                 </div>
                  <!-- HR associated with Premium Production -->
-                 <hr id="factory-premium-hr" class="subsection-hr-locked" data-unlock-condition="cows:5">
+                 <hr id="factory-premium-hr" class="subsection-hr-locked" data-unlock-condition="cows:7">
                 <!-- Premium Production Section -->
-                <div id="factory-premium-production" class="subsection-locked" data-unlock-condition="cows:5">
+                <div id="factory-premium-production" class="subsection-locked" data-unlock-condition="cows:7">
                     <!-- This span is the ONLY thing visible when locked -->
                     <span class="unlock-info subsection-unlock-info">Requires 7 Cows (Ripe Milk)</span>
                      <!-- Content below is hidden when locked -->
@@ -210,6 +213,18 @@
             <!-- Changelog Tab -->
             <div id="tab-changelog" class="tab-pane">
                 <h2>Changelog</h2>
+
+                <div class="changelog-version">
+                    <h3>Version 0.3.1: Balancing and Bugfixes</h3>
+                    <ul>
+                        <li>NEW: "Process All" button appears when unlocking the Factory</li>
+                        <li>Milk Market customer generation improved</li>
+                        <li>Dairy Dads milk amount scaling less random</li>
+                        <li>Milk Mom reward scaling decreased</li>
+                        <li>Bugfix: Auto-Tap now works properly after reselecting active playstyle</li>
+                        <li>Bugfix: Subsection now unlock at the correct moment</li>
+                    </ul>
+                </div>
 
                 <div class="changelog-version">
                     <h3>Version 0.3.0: Cow Cash Upgrades</h3>
