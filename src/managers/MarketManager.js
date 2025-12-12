@@ -37,7 +37,7 @@ export class MarketManager {
         const count = state.market.customers.length;
         if (count >= MARKET.MAX_CUSTOMERS) return;
 
-        let duration = MARKET.ARRIVAL_TIMES[count];
+        let duration = MARKET.BASE_ARRIVAL_TIME * Math.pow(2, count);
         
         state.market.timerDuration = duration;
         state.market.timerRemaining = duration;
@@ -46,8 +46,8 @@ export class MarketManager {
     static generateCustomer() {
         // Get customer counts
         const customerCount = state.market.customers.length;
-        const momCount = state.market.customers.filter(c => c.type === 'Milk Mom').length;
-        const dadCount = state.market.customers.filter(c => c.type === 'Dairy Dad').length;
+        const momCount = state.market.customers.filter(c => c.type === 'Mom').length;
+        const dadCount = state.market.customers.filter(c => c.type === 'Dad').length;
 
         if (customerCount >= MARKET.MAX_CUSTOMERS) return;
         
@@ -79,7 +79,7 @@ export class MarketManager {
         
         return {
             id: generateId('mom'),
-            type: 'Milk Mom',
+            type: 'Mom',
             name,
             sequence: state.market.momSequence,
             request: req,
@@ -98,7 +98,7 @@ export class MarketManager {
 
         return {
             id: generateId('dad'),
-            type: 'Dairy Dad',
+            type: 'Dad',
             name,
             sequence: state.market.dadSequence,
             request: req,
@@ -123,7 +123,7 @@ export class MarketManager {
             state.market.customers.splice(idx, 1);
 
             // The time left will be capped at the duration if there'd be ONE MORE customer
-            const timerIfOneMore = MARKET.ARRIVAL_TIMES[state.market.customers.length + 1];
+            const timerIfOneMore = MARKET.BASE_ARRIVAL_TIME * Math.pow(2, state.market.customers.length + 1);
             if (state.market.timerRemaining > timerIfOneMore) {
                 state.market.timerRemaining = timerIfOneMore;
             }

@@ -1,274 +1,224 @@
-/* Basic Reset & Body Styling */
-* { box-sizing: border-box; margin: 0; padding: 0; }
-body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: 1.6; background-color: #f0f0f0; color: #333; display: flex; justify-content: center; padding-top: 20px; }
-#game-container { width: 90%; max-width: 800px; background-color: #ffffff; border: 1px solid #ccc; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); border-radius: 5px; overflow: hidden; }
-.game-header { padding: 15px 20px; background-color: #e9e9e9; border-bottom: 1px solid #ccc; }
-.game-header h1 { text-align: center; margin-bottom: 10px; font-size: 1.5em; }
-.resource-display { min-height: 20px; text-align: center; }
-.tab-navigation { display: flex; background-color: #f8f8f8; border-bottom: 1px solid #ccc; }
-.tab-button { flex-grow: 1; padding: 12px 15px; border: none; border-right: 1px solid #ccc; background-color: transparent; cursor: pointer; text-align: center; font-size: 1em; font-weight: bold; color: #555; transition: background-color 0.2s ease, color 0.2s ease; }
-.tab-button:last-child { border-right: none; }
-.tab-button:hover:not(.locked) { background-color: #e0e0e0; color: #111; }
-.tab-button.active { background-color: #ffffff; color: #000; border-bottom: 1px solid #ffffff; margin-bottom: -1px; position: relative; font-style: normal; }
-.tab-content-area { padding: 20px; min-height: 300px; }
-.tab-pane { display: none; animation: fadeIn 0.3s ease-in-out; }
-.tab-pane.active { display: block; }
-@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-.tab-pane h2 { margin-bottom: 15px; color: #444; border-bottom: 1px solid #eee; padding-bottom: 5px; }
-.tab-pane p { color: #555; margin-bottom: 0.8em; /* Added margin for spacing */ }
-.action { padding: 8px 15px; margin: 5px 0; background-color: #4CAF50; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 0.95em; transition: background-color 0.2s ease, opacity 0.2s ease; display: inline-block; vertical-align: middle; }
-.action:hover:not(:disabled) { background-color: #45a049; }
-.action:active:not(:disabled) { background-color: #3e8e41; }
-.action:disabled, .action.disabled { background-color: #cccccc; color: #666666; cursor: not-allowed; opacity: 0.7; }
-.action + span, button + span { margin-left: 8px; font-size: 0.9em; color: #555; vertical-align: middle; }
+/* --- Global & Reset --- */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
 
-/* Game Footer */
-.game-footer {
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    line-height: 1.6;
+    background-color: #f0f0f0;
+    color: #333;
+    display: flex;
+    justify-content: center;
+    padding-top: 20px;
+}
+
+hr {
+    border: none;
+    border-top: 1px solid #eee;
+    margin: 15px 0;
+}
+
+/* --- Layout Structure --- */
+#game-container {
+    width: 90%;
+    max-width: 800px;
+    background-color: #ffffff;
+    border: 1px solid #ccc;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+/* --- Header Area --- */
+.playstyle-indicator {
+    text-align: center;
+    font-weight: bold;
+    padding: 8px 0;
+    background-color: #e0e0e0;
+    color: #333;
+    border-bottom: 1px solid #ccc;
+    margin-bottom: 0;
+    font-size: 0.9em;
+}
+
+.game-header {
     padding: 15px 20px;
     background-color: #e9e9e9;
-    border-top: 1px solid #ccc;
-    
-    /* Flex settings */
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+    border-bottom: 1px solid #ccc;
 }
 
-.game-footer p {
-    margin: 0;
-    flex: 1; /* This makes all 3 paragraphs take up equal width (33.3%) */
-}
-
-/* Align the text inside the equal-width boxes */
-.game-footer p:nth-child(1) {
-    text-align: left;
-}
-
-.game-footer p:nth-child(2) {
-    text-align: center; /* This ensures the middle text is exactly in the center of the bar */
-}
-
-.game-footer p:nth-child(3) {
-    text-align: right;
-}
-
-/* Container for button groups */
-.button-group {
+.game-header h1 {
+    text-align: center;
     margin-bottom: 10px;
+    font-size: 1.5em;
+}
+
+.game-header .resource {
+    margin: 0 5px;
+}
+
+.resource-display {
+    min-height: 20px;
+    font-size: 1.2em;
+    font-weight: bold;
+    text-align: center;
+}
+
+
+/* --- Tab Navigation --- */
+.tab-navigation {
     display: flex;
-    align-items: center; /* Vertically align items */
-    gap: 10px;
+    background-color: #f8f8f8;
+    border-bottom: 1px solid #ccc;
 }
 
-/* Style for the auto-tap toggle button */
-.auto-toggle-button {
-    background-color: #5bc0de; /* Info blue */
-    min-width: 110px; /* Give it a consistent width */
-}
-.auto-toggle-button:hover:not(:disabled) {
-    background-color: #31b0d5;
-}
-.auto-toggle-button.active-auto { /* Style when auto-tap is ON */
-    background-color: #f0ad4e; /* Warning orange */
-}
-.auto-toggle-button.active-auto:hover:not(:disabled) {
-    background-color: #ec971f;
+.tab-button {
+    flex-grow: 1;
+    padding: 10px 15px;
+    border: none;
+    border-right: 1px solid #ccc;
+    background-color: transparent;
+    cursor: pointer;
+    text-align: center;
+    font-size: 2em;
+    font-weight: bold;
+    color: #555;
+    transition: background-color 0.2s ease, color 0.2s ease;
 }
 
+.tab-button:last-child {
+    border-right: none;
+}
 
-/* Tab Unlocking Styles */
+.tab-button:hover:not(.locked) {
+    background-color: #e0e0e0;
+    color: #111;
+}
+
+.tab-button.active {
+    background-color: #ffffff;
+    color: #000;
+    border-bottom: 1px solid #ffffff;
+    margin-bottom: -1px;
+    position: relative;
+    font-style: normal;
+}
+
 .tab-button.locked {
     color: #888;
     background-color: #f0f0f0;
     cursor: not-allowed;
+    font-size: 1.5em;
     position: relative;
     font-style: italic;
     opacity: 0.85;
 }
-.tab-button.locked:hover { background-color: #e8e8e8; color: #777; }
 
-/* Shared Unlock Info Styling */
-.unlock-info {
-    display: block; /* Default */
-    font-size: 0.75em;
-    font-weight: normal;
-    font-style: normal;
+.tab-button.locked:hover {
+    background-color: #e8e8e8;
     color: #777;
-    margin-top: 2px;
 }
-/* Hide tab unlock info once the tab itself is unlocked */
-.tab-button:not(.locked) .unlock-info {
+
+/* --- Tab Content Area --- */
+.tab-content-area {
+    padding: 20px;
+    min-height: 300px;
+}
+
+.tab-pane {
     display: none;
+    animation: fadeIn 0.3s ease-in-out;
 }
-/* Ensure tab unlock info shows when locked */
-.tab-button.locked .unlock-info {
+
+.tab-pane.active {
     display: block;
 }
 
-/* Styling for Locked Subsections Container */
-.subsection-locked {
-    padding: 10px 15px; /* Reduced padding */
-    margin: 15px 0;
-    border: 1px dashed #d0d0d0; /* Slightly darker dashed border */
-    background-color: #fdfdfd; /* Very light grey background */
-    border-radius: 4px;
-    min-height: 30px; /* Ensure it has some height even with only text */
-}
-
-/* Hide all direct children within a locked subsection by default */
-.subsection-locked > * {
-    display: none !important; /* Hide all content */
-}
-
-/* Style and EXPLICITLY SHOW the unlock info span inside a locked subsection */
-.subsection-locked > .subsection-unlock-info {
-    display: inline-block !important; /* Override the general hide rule */
-    font-size: 0.85em;
-    font-style: italic;
-    color: #666; /* Slightly darker grey */
-    margin: 0; /* Reset margins if any */
-    padding: 0; /* Reset padding */
-}
-
-/* Styling for Locked HR elements - HIDE them */
-.subsection-hr-locked {
-    display: none; /* Hide HRs associated with locked sections */
-}
-
-/* Minor style adjustments */
-.game-header .resource { margin: 0 5px; }
-/* Default HR style (for unlocked sections) */
-hr { border: none; border-top: 1px solid #eee; margin: 15px 0; }
-
-.changelog-version {
-    margin-bottom: 15px; /* Adjust this value as needed */
-    border-bottom: 1px solid #ccc;
-    padding-bottom: 10px;
-}
-
-.changelog-version h3 {
-    margin-bottom: 8px; /* Space below the heading itself */
-}
-
-.changelog-version ul {
-    margin-left: 20px; /* Indent the list */
-    margin-top: 0;
-    padding-left: 0;
-}
-
-.changelog-version ul li {
-    margin-bottom: 4px; /* Space between list items */
-}
-
-/* Milk Market Specific Styles */
-#customer-queue {
-    border: 1px solid #eee;
-    padding: 10px;
-    background-color: #fdfdfd;
-    min-height: 50px; /* Ensure it has some height even when empty */
-    max-height: 280px; /* Limit height and allow scrolling if needed */
-    overflow-y: auto;
-    margin-top: 15px;
+.tab-pane h2 {
     margin-bottom: 15px;
-    border-radius: 4px; /* Added radius */
+    color: #444;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 5px;
 }
 
-/* Style for the placeholder text when queue is empty */
-#customer-queue > p > i {
-    color: #888;
-    font-style: italic;
-    display: block; /* Make it block to center potentially */
-    text-align: center;
-    padding: 10px 0;
+.tab-pane p {
+    color: #555;
+    margin-bottom: 0.8em;
 }
 
-
-.customer-entry {
-    padding: 10px 5px; /* Adjust padding */
-    /* border-bottom: 1px dashed #ddd; */ /* Replaced by hr */
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
 }
 
-.customer-entry p {
-    margin-bottom: 8px; /* Space between text and button */
-    line-height: 1.4; /* Adjust line height within entry */
-    color: #444; /* Slightly darker text for entries */
-    font-size: 0.95em; /* Slightly smaller font for details */
-}
-
-.customer-entry strong {
-    color: #333; /* Even darker for name/type */
-    font-size: 1.05em; /* Make name slightly larger */
-}
-
-.customer-entry .sell-milk-button {
-    padding: 6px 12px; /* Slightly smaller button */
-    font-size: 0.9em;
-    margin-top: 5px;
-    background-color: #337ab7; /* Bootstrap primary blue */
+/* --- General Buttons & Actions --- */
+.action {
+    padding: 8px 15px;
+    margin: 5px 0;
+    background-color: #4CAF50;
+    color: white;
     border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.95em;
+    transition: background-color 0.2s ease, opacity 0.2s ease;
+    display: inline-block;
+    vertical-align: middle;
 }
-.customer-entry .sell-milk-button:hover:not(:disabled) {
-     background-color: #286090;
+
+.action:hover:not(:disabled) {
+    background-color: #45a049;
 }
-.customer-entry .sell-milk-button:disabled {
+
+.action:active:not(:disabled) {
+    background-color: #3e8e41;
+}
+
+.action:disabled,
+.action.disabled {
     background-color: #cccccc;
     color: #666666;
     cursor: not-allowed;
     opacity: 0.7;
 }
 
-
-/* Style for the HR inside customer entry */
-.customer-hr {
-    border: none;
-    border-top: 1px dashed #ddd; /* Dashed line between customers */
-    margin: 15px 0 5px 0; /* Adjust spacing around HR */
-}
-
-/* Remove hr from the very last entry */
-.customer-entry:last-child .customer-hr {
-    display: none;
-}
-
-
-#arrival-timer-display {
-    margin-top: 10px; /* Reduced top margin */
-    font-weight: bold;
+.action + span,
+button + span {
+    margin-left: 8px;
+    font-size: 0.9em;
     color: #555;
-    text-align: center;
-    padding: 10px; /* Increased padding */
-    background-color: #f0f0f0;
-    border: 1px solid #e0e0e0; /* Added subtle border */
-    border-radius: 4px;
-    font-size: 0.95em;
+    vertical-align: middle;
 }
 
-/* --- NEW/MODIFIED Upgrade Item Styling --- */
+.button-group {
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
 
-/* Container for the upgrade items */
+/* --- Upgrade Grid System --- */
 .upgrades-grid-container {
-    display: flex; /* Enable flexbox */
-    flex-wrap: wrap; /* Allow items to wrap to the next line */
-    gap: 15px; /* Add space between items (adjust value as needed) */
-    margin-bottom: 15px; /* Add some margin below the whole container */
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin-bottom: 15px;
 }
 
-/* Individual upgrade item styling */
 .upgrade-item {
-    /* Remove bottom margin, gap handles spacing */
     margin-bottom: 0;
-    flex-basis: calc(50% - 8px); /* Example: ~2 items per row (50% minus half the gap) */
-    flex-grow: 1; /* Allows items to grow and fill space */
-    min-width: 200px; /* Prevent items from becoming too narrow */
-
-    /* Keep existing styles */
+    flex-basis: calc(50% - 8px);
+    flex-grow: 1;
+    min-width: 200px;
     padding: 15px;
     border: 1px solid #e0e0e0;
     border-radius: 4px;
     background-color: #f9f9f9;
-    box-sizing: border-box; /* Ensure padding/border are included in width */
+    box-sizing: border-box;
 }
-
 
 .upgrade-item h4 {
     margin-bottom: 8px;
@@ -276,22 +226,21 @@ hr { border: none; border-top: 1px solid #eee; margin: 15px 0; }
 }
 
 .upgrade-item p {
-    margin-bottom: 5px; /* Tighter spacing within item */
+    margin-bottom: 5px;
     font-size: 0.9em;
     color: #555;
 }
 
-.upgrade-item p span { /* Style for the dynamic values */
+.upgrade-item p span {
     font-weight: bold;
     color: #222;
 }
 
 .upgrade-item .upgrade-button {
     margin-top: 10px;
-    min-width: 100px; /* Give buttons a minimum width */
-    background-color: #5bc0de; /* Default: Info Blue */
-    border: none; /* Ensure no default borders interfere */
-    /* Inherit .action styles for transitions etc. */
+    min-width: 100px;
+    background-color: #5bc0de;
+    border: none;
     padding: 8px 15px;
     color: white;
     border-radius: 4px;
@@ -301,65 +250,178 @@ hr { border: none; border-top: 1px solid #eee; margin: 15px 0; }
     display: inline-block;
     vertical-align: middle;
 }
+
 .upgrade-item .upgrade-button:hover:not(:disabled) {
     background-color: #31b0d5;
 }
 
-/* Style for Max Level button */
-.upgrade-item .upgrade-button.max-level {
-    background-color: #f0ad4e; /* Warning orange */
-    color: white;
-    cursor: default; /* Indicate non-interactive */
-}
-.upgrade-item .upgrade-button.max-level:hover {
-     background-color: #ec971f; /* Slightly darker orange on hover */
-}
-
-/* Disabled state (ensure it overrides others if needed) */
 .upgrade-item .upgrade-button:disabled {
-    background-color: #cccccc !important; /* Use !important if specificity issues arise */
+    background-color: #cccccc !important;
     color: #666666 !important;
     cursor: not-allowed !important;
     opacity: 0.7 !important;
 }
 
-/* --- END OF NEW/MODIFIED Upgrade Item Styling --- */
-
-
-/* Playstyle Indicator (Above Header) */
-.playstyle-indicator {
-    text-align: center;
-    font-weight: bold;
-    padding: 8px 0;
-    background-color: #e0e0e0; /* Light grey background */
-    color: #333;
-    border-bottom: 1px solid #ccc;
-    margin-bottom: 0; /* Remove default margin if needed */
-    font-size: 0.9em;
+.upgrade-item .upgrade-button.max-level {
+    background-color: #f0ad4e;
+    color: white;
+    cursor: default;
 }
 
-/* Playstyle Selection Modal Styles */
+.upgrade-item .upgrade-button.max-level:hover {
+    background-color: #ec971f;
+}
+
+/* --- Market & Customer Queue --- */
+#customer-queue {
+    border: 1px solid #eee;
+    padding: 10px;
+    background-color: #fdfdfd;
+    min-height: 50px;
+    margin-top: 15px;
+    margin-bottom: 15px;
+    border-radius: 4px;
+    display: grid;
+    /* 
+       1. auto-fill: creates as many columns as fit.
+       2. minmax(210px, 1fr): Cards are at least 210px wide. 
+          - On wide screens: fits 3 columns.
+          - On medium screens: drops to 2 columns (perfect 2x3 grid).
+          - On mobile: drops to 1 column.
+    */
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    grid-auto-rows: 1fr;
+    grid-gap: 10px;
+    border: 2px solid #ddd;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.customer-entry {
+    padding: 10px 5px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background-color: #f9f9f9;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 110px; 
+}
+
+.customer-entry p {
+    margin-bottom: 8px;
+    line-height: 1.4;
+    color: #444;
+    font-size: 0.95em;
+}
+
+.customer-entry strong {
+    color: #333;
+    font-size: 1.05em;
+}
+
+.customer-entry .sell-milk-button {
+    padding: 6px 12px;
+    font-size: 0.9em;
+    margin-top: 5px;
+    background-color: #337ab7;
+    border: none;
+    border-radius: 4px;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.customer-entry .sell-milk-button:hover:not(:disabled) {
+    background-color: #286090;
+}
+
+.customer-entry .sell-milk-button:disabled {
+    background-color: #cccccc;
+    color: #666666;
+    cursor: not-allowed;
+    opacity: 0.7;
+}
+
+.customer-entry.timer-slot {
+    background-color: #f0f0f0;
+    border: 2px dashed #ccc;
+    color: #666;
+    align-items: center; 
+    justify-content: center;
+    text-align: center;
+    font-weight: bold;
+    font-size: 0.9em;
+    cursor: default;
+}
+
+
+/* --- Unlocks & Hidden Sections --- */
+.unlock-info {
+    display: block;
+    font-size: 0.75em;
+    font-weight: normal;
+    font-style: normal;
+    color: #777;
+    margin-top: 2px;
+}
+
+.tab-button:not(.locked) .unlock-info {
+    display: none;
+}
+
+.tab-button.locked .unlock-info {
+    display: block;
+}
+
+.subsection-locked {
+    padding: 10px 15px;
+    margin: 15px 0;
+    border: 1px dashed #d0d0d0;
+    background-color: #fdfdfd;
+    border-radius: 4px;
+    min-height: 30px;
+}
+
+.subsection-locked > * {
+    display: none !important;
+}
+
+.subsection-locked > .subsection-unlock-info {
+    display: inline-block !important;
+    font-size: 0.85em;
+    font-style: italic;
+    color: #666;
+    margin: 0;
+    padding: 0;
+}
+
+.subsection-hr-locked {
+    display: none;
+}
+
+/* --- Modals (Playstyle) --- */
 #playstyle-modal {
-    display: none; /* Hidden by default */
-    position: fixed; /* Stay in place */
-    z-index: 1000; /* Sit on top */
+    display: none;
+    position: fixed;
+    z-index: 1000;
     left: 0;
     top: 0;
-    width: 100%; /* Full width */
-    height: 100%; /* Full height */
-    overflow: auto; /* Enable scroll if needed */
-    background-color: rgba(0,0,0,0.6); /* Black w/ opacity */
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.6);
     justify-content: center;
     align-items: center;
 }
 
 #playstyle-modal.active {
-    display: flex; /* Use flex to center content */
+    display: flex;
 }
 
 .playstyle-modal-content {
     background-color: #fefefe;
-    margin: auto; /* Centered */
+    margin: auto;
     padding: 30px;
     border: 1px solid #888;
     width: 80%;
@@ -397,7 +459,7 @@ hr { border: none; border-top: 1px solid #eee; margin: 15px 0; }
 
 .playstyle-warning {
     font-style: italic;
-    color: #d9534f; /* Warning red */
+    color: #d9534f;
     margin-top: 25px;
     margin-bottom: 25px;
     font-weight: bold;
@@ -414,26 +476,87 @@ hr { border: none; border-top: 1px solid #eee; margin: 15px 0; }
     border-radius: 5px;
     color: white;
     transition: background-color 0.2s ease;
-    margin: 0 10px; /* Space buttons */
+    margin: 0 10px;
 }
 
 .playstyle-select-button.active-style {
-    background-color: #5cb85c; /* Green for Active */
+    background-color: #5cb85c;
 }
+
 .playstyle-select-button.active-style:hover {
     background-color: #4cae4c;
 }
 
 .playstyle-select-button.passive-style {
-    background-color: #5bc0de; /* Blue for Passive */
+    background-color: #5bc0de;
 }
+
 .playstyle-select-button.passive-style:hover {
     background-color: #46b8da;
 }
 
-.button-group {
-    margin-bottom: 10px;
+/* --- Changelog --- */
+.changelog-version {
+    margin-bottom: 15px;
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 10px;
+}
+
+.changelog-version h3 {
+    margin-bottom: 8px;
+}
+
+.changelog-version ul {
+    margin-left: 20px;
+    margin-top: 0;
+    padding-left: 0;
+    list-style: none;
+}
+
+.changelog-version ul li {
+    margin-bottom: 4px;
+}
+
+/* --- Footer --- */
+.game-footer {
+    padding: 15px 20px;
+    background-color: #e9e9e9;
+    border-top: 1px solid #ccc;
     display: flex;
-    align-items: center; /* Vertically align items */
-    gap: 10px; /* This will space out the "Process Milk" and "Process All" buttons */
+    justify-content: space-between;
+    align-items: center;
+}
+
+.game-footer p {
+    margin: 0;
+    flex: 1;
+}
+
+.game-footer p:nth-child(1) {
+    text-align: left;
+}
+
+.game-footer p:nth-child(2) {
+    text-align: center;
+}
+
+.game-footer p:nth-child(3) {
+    text-align: right;
+}
+
+.auto-toggle-button {
+    background-color: #5bc0de;
+    min-width: 110px;
+}
+
+.auto-toggle-button:hover:not(:disabled) {
+    background-color: #31b0d5;
+}
+
+.auto-toggle-button.active-auto {
+    background-color: #f0ad4e;
+}
+
+.auto-toggle-button.active-auto:hover:not(:disabled) {
+    background-color: #ec971f;
 }

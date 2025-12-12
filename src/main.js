@@ -38,12 +38,30 @@ function gameLoop() {
 window.addEventListener('DOMContentLoaded', () => {
     console.log("Kaas: The Return started");
 
-    // Check Playstyle
+    // // Check Playstyle
+    // // FORCE DEFAULT TO PASSIVE (Popup Disabled)
+    // if (!state.playstyle) {
+    //     state.playstyle = 'passive'; // Set default immediately
+        
+    //     // Update the UI text so it doesn't get stuck on "Loading..."
+    //     const display = document.getElementById('playstyle-display');
+    //     if (display) {
+    //         display.textContent = `Playstyle: Passive`;
+    //     }
+    // }
+
+    // // Start Loop immediately (no waiting for modal callback)
+    // requestAnimationFrame(gameLoop);
+
     if (!state.playstyle) {
+        const display = document.getElementById('playstyle-display');
+        if (display) {
+            display.textcontent = 'Playstyle: Loading...';
+        }
         Components.showPlaystyleModal((selectedStyle) => {
             state.playstyle = selectedStyle;
             const display = document.getElementById('playstyle-display');
-            if(display) {
+            if (display) {
                 display.textContent = `Playstyle: ${selectedStyle.charAt(0).toUpperCase() + selectedStyle.slice(1)}`;
             }
             // Start Loop
@@ -51,5 +69,5 @@ window.addEventListener('DOMContentLoaded', () => {
         });
     } else {
         requestAnimationFrame(gameLoop);
-    }
+    } 
 });

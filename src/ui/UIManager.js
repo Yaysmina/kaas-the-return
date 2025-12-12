@@ -46,7 +46,7 @@ export class UIManager {
                 <h4>${def.name}</h4>
                 <p>${def.description}</p>
                 <p>Level: <span id="upg-lvl-${key}">0</span>/${def.maxLevel}</p>
-                <p>Effect: <span id="upg-eff-${key}">-</span></p>
+                <p>Currently: <span id="upg-eff-${key}">-</span></p>
                 <button class="upgrade-button" id="upg-btn-${key}">Purchase</button>
             `;
             container.appendChild(div);
@@ -117,7 +117,7 @@ export class UIManager {
                 btn.disabled = true;
             } else {
                 const cost = def.getCost(level);
-                btn.textContent = `Buy (${cost} CC)`;
+                btn.textContent = `Upgrade for ${cost}💵`;
                 btn.disabled = state.resources.cowCash < cost;
             }
         });

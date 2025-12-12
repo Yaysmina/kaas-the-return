@@ -5,13 +5,13 @@ export const COSTS = {
 
 export const PRODUCTION = {
     BASE_TAPS_PER_CYCLE: 20,
-    AUTO_TAP_SPEED_MS: 250, // 4 times per second
+    AUTO_TAP_SPEED_MS: 1000 / 4,
 };
 
 export const MARKET = {
     MAX_CUSTOMERS: 6,
     BASE_DAD_REQUEST: 5,
-    ARRIVAL_TIMES: [15, 30, 60, 120, 240, 480],
+    BASE_ARRIVAL_TIME: 15,
 };
 
 export const DEV_CHEATS = {

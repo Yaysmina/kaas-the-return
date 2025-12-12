@@ -3,120 +3,101 @@ import { MarketManager } from '../managers/MarketManager.js';
 import { formatTime } from '../core/Utils.js';
 import { MARKET } from '../core/Constants.js';
 
-// --- State Cache (Module Level) ---
+// --- State Cache ---
 let _lastTimerText = "";
-let _lastCustomerSignature = ""; 
+let _lastCustomerSignature = null; // Set to null to ensure initial render
 let _lastMilkCount = -1;
 
 export function updateMarketUI() {
     const queueDiv = document.getElementById('customer-queue');
-    const timerDisplay = document.getElementById('arrival-timer-display');
     const businessTab = document.querySelector('[data-tab="tab-business"]');
 
-    // --- 1. OPTIMIZED TIMER UPDATE ---
-    let currentTimerText = "";
-    
-    // Determine what the text SHOULD be
-    if (!businessTab || businessTab.classList.contains('locked')) {
-        currentTimerText = "Market Closed";
-    } else if (state.market.customers.length >= MARKET.MAX_CUSTOMERS) {
-        currentTimerText = "Customer Queue Full";
-    } else if (state.market.timerRemaining <= 0) {
-        currentTimerText = "Checking for next customer...";
-    } else {
-        // We look at the integer value. If it goes 5.9 -> 5.1, text doesn't change. 
-        // 5.1 -> 4.9, text changes.
-        currentTimerText = `Next customer in: ${formatTime(state.market.timerRemaining)}`;
-    }
-
-    // Only touch the DOM if the text is different from the last frame
-    if (currentTimerText !== _lastTimerText) {
-        timerDisplay.textContent = currentTimerText;
-        _lastTimerText = currentTimerText;
-    }
-
-    // --- 2. OPTIMIZED LIST RENDERING ---
-    // Create a unique "signature" for the list based on customer IDs. 
-    // If a customer is added or removed, this string changes.
+    // 1. GENERATE SIGNATURE
+    // We include the queue length in signature to trigger a rebuild if a customer leaves
     const currentSignature = state.market.customers.map(c => c.id).join(',');
 
-    // Only rebuild innerHTML if the list structure changed
+    // 2. REBUILD GRID (Only if customers changed)
     if (currentSignature !== _lastCustomerSignature) {
-        
-        if (state.market.customers.length === 0) {
-            queueDiv.innerHTML = '<p><i>No customers waiting...</i></p>';
-        } else {
-            queueDiv.innerHTML = ''; // Clear
+        queueDiv.innerHTML = ''; 
 
-            state.market.customers.forEach((c) => {
-                const div = document.createElement('div');
-                div.className = 'customer-entry';
+        // A. Render Customers
+        state.market.customers.forEach((c) => {
+            const div = document.createElement('div');
+            div.className = 'customer-entry';
 
-                // Reward text logic
-                const rewardText = [
-                    c.rewardGold > 0 ? `${c.rewardGold} Gold` : null,
-                    c.rewardCowCash > 0 ? `${c.rewardCowCash} Cow Cash` : null
-                ].filter(Boolean).join(', ');
+            const rewardText = [
+                c.rewardGold > 0 ? `Gives ${c.rewardGold}🪙` : null,
+                c.rewardCowCash > 0 ? `Gives ${c.rewardCowCash}💵` : null
+            ].filter(Boolean).join('<br>');
 
-                div.innerHTML = `
-                    <p>
-                        <strong>${c.type} ${c.sequence} (${c.name})</strong><br>
-                        Requests: ${c.request} Milk<br>
-                        Rewards: ${rewardText}
-                    </p>
-                `;
+            div.innerHTML = `
+                <p>
+                    <strong>(${c.type}) ${c.name}</strong><br>
+                    ${rewardText}
+                </p>
+            `;
 
-                const btn = document.createElement('button');
-                btn.className = 'action sell-milk-button';
-                btn.textContent = `Sell ${c.request} Milk`;
-                // Store the cost on the button element so we can check it later without re-finding the customer object
-                btn.dataset.cost = c.request; 
-                btn.dataset.id = c.id;
-                
-                // Initial check for disabled state
-                btn.disabled = state.resources.milk < c.request;
-                
-                btn.onclick = () => {
-                    MarketManager.sell(c.id);
-                    // Force an immediate UI update request implies we don't wait for next frame
-                    // But usually the next game loop frame handles it fine.
-                };
-                
-                div.appendChild(btn);
+            const btn = document.createElement('button');
+            btn.className = 'action sell-milk-button';
+            btn.textContent = `Sell ${c.request}🥛`;
+            btn.dataset.cost = c.request; 
+            btn.dataset.id = c.id;
+            // Check affordability immediately
+            btn.disabled = state.resources.milk < c.request;
+            
+            btn.onclick = () => { MarketManager.sell(c.id); };
+            
+            div.appendChild(btn);
+            queueDiv.appendChild(div);
+        });
 
-                const hr = document.createElement('hr');
-                hr.className = 'customer-hr';
-                div.appendChild(hr);
-
-                queueDiv.appendChild(div);
-            });
+        // B. Render Timer Slot (If there is space)
+        if (state.market.customers.length < MARKET.MAX_CUSTOMERS) {
+            const timerDiv = document.createElement('div');
+            timerDiv.className = 'customer-entry timer-slot';
+            timerDiv.id = 'market-timer-slot'; // ID to find it easily later
+            timerDiv.innerHTML = ''; // Keep empty initially to avoid flashing text
+            queueDiv.appendChild(timerDiv);
         }
         
-        // Update our cache
         _lastCustomerSignature = currentSignature;
-        // Reset milk cache to ensure buttons get checked immediately after a rebuild
-        _lastMilkCount = -1; 
+        _lastMilkCount = -1; // Reset button cache
+        _lastTimerText = null; // Force the timer text to update immediately
     }
 
-    // --- 3. OPTIMIZED BUTTON STATE UPDATE ---
-    // Even if the list structure didn't change (no new customers), 
-    // the player might have tapped enough milk to afford a current customer.
-    // We only need to update the button 'disabled' property, NOT rebuild the HTML.
+    // 3. UPDATE TIMER TEXT (Every Frame)
+    const timerSlot = document.getElementById('market-timer-slot');
     
-    if (state.resources.milk !== _lastMilkCount) {
-        // Only loop through buttons if milk amount actually changed
-        const buttons = queueDiv.querySelectorAll('.sell-milk-button');
+    if (timerSlot) {
+        let currentTimerText = "";
         
+        if (!businessTab || businessTab.classList.contains('locked')) {
+            currentTimerText = "Market Closed";
+        } else if (state.market.timerRemaining <= 0) {
+            currentTimerText = "New customer arriving...";
+        } else {
+            // Only update logic is needed here, rendering happens below if changed
+            currentTimerText = `Next customer in:<br><span style="font-size:1.2em">${formatTime(state.market.timerRemaining)}</span>`;
+        }
+
+        // If text changed (or forced by null reset above), update DOM
+        if (currentTimerText !== _lastTimerText) {
+            timerSlot.innerHTML = currentTimerText;
+            _lastTimerText = currentTimerText;
+        }
+    }
+
+    // 4. UPDATE BUTTONS (Milk Affordability)
+    if (state.resources.milk !== _lastMilkCount) {
+        const buttons = queueDiv.querySelectorAll('.sell-milk-button');
         buttons.forEach(btn => {
             const cost = parseInt(btn.dataset.cost, 10);
             const canAfford = state.resources.milk >= cost;
-            
-            // Only toggle class/prop if necessary to minimize DOM flow
+            // Only touch DOM if state is actually different
             if (btn.disabled === canAfford) {
                 btn.disabled = !canAfford;
             }
         });
-
         _lastMilkCount = state.resources.milk;
     }
 }
