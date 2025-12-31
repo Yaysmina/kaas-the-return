@@ -5,6 +5,7 @@ import { UpgradeManager } from '../managers/UpgradeManager.js';
 import { UPGRADES } from '../data/UpgradesData.js';
 import { updateMarketUI } from './MarketUI.js';
 import { PRODUCTION, COSTS } from '../core/Constants.js';
+import { parseEmojis, parseEmojisInText } from '../core/EmojiUtils.js';
 
 export class UIManager {
     constructor() {
@@ -49,6 +50,7 @@ export class UIManager {
                 <p>Currently: <span id="upg-eff-${key}">-</span></p>
                 <button class="upgrade-button" id="upg-btn-${key}">Purchase</button>
             `;
+            parseEmojis(div);
             container.appendChild(div);
             
             div.querySelector('button').addEventListener('click', () => {
@@ -60,7 +62,6 @@ export class UIManager {
     update() {
         // Resources
         this.get('gold-display').textContent = Math.floor(state.resources.gold);
-        this.get('cows-display').textContent = state.resources.cows;
         this.get('milk-display').textContent = state.resources.milk;
         this.get('cow-cash-display').textContent = Math.floor(state.resources.cowCash);
         
@@ -117,10 +118,57 @@ export class UIManager {
                 btn.disabled = true;
             } else {
                 const cost = def.getCost(level);
-                btn.textContent = `Upgrade for ${cost}💵`;
+                btn.innerHTML = parseEmojisInText(`Upgrade for ${cost}💵`);
                 btn.disabled = state.resources.cowCash < cost;
             }
         });
+
+        // Farm Tab Raw Milk Count
+        const rawMilkCountSpan = document.getElementById('farm-raw-milk-count');
+        if (rawMilkCountSpan) {
+            const rawMilkCount = state.resources.rawMilk;
+            rawMilkCountSpan.innerHTML = parseEmojisInText(`${rawMilkCount} raw🥛`);
+            rawMilkCountSpan.style.display = 'block';
+        }
+
+        // Business Tab Customer Count
+        const businessTabBtn = document.querySelector('button[data-tab="tab-business"]');
+        const customerCountSpan = document.getElementById('business-customer-count');
+        if (businessTabBtn && customerCountSpan) {
+            const isUnlocked = !businessTabBtn.classList.contains('locked');
+            if (isUnlocked) {
+                const customerCount = state.market.customers.length;
+                customerCountSpan.textContent = `${customerCount} ${customerCount === 1 ? 'customer' : 'costumers'}`;
+                customerCountSpan.style.display = 'block';
+            } else {
+                customerCountSpan.style.display = 'none';
+            }
+        }
+
+        // Upgrades Tab Available Upgrades Count
+        const upgradesTabBtn = document.querySelector('button[data-tab="tab-upgrades"]');
+        const upgradeCountSpan = document.getElementById('upgrades-count');
+        if (upgradesTabBtn && upgradeCountSpan) {
+            const isUnlocked = !upgradesTabBtn.classList.contains('locked');
+            if (isUnlocked) {
+                // Count available upgrades (not max level and affordable)
+                let availableCount = 0;
+                Object.keys(UPGRADES).forEach(key => {
+                    const def = UPGRADES[key];
+                    const level = state.upgrades[key];
+                    if (level < def.maxLevel) {
+                        const cost = def.getCost(level);
+                        if (state.resources.cowCash >= cost) {
+                            availableCount++;
+                        }
+                    }
+                });
+                upgradeCountSpan.textContent = `${availableCount} ${availableCount === 1 ? 'upgrade' : 'upgrades'}`;
+                upgradeCountSpan.style.display = 'block';
+            } else {
+                upgradeCountSpan.style.display = 'none';
+            }
+        }
 
         // Sub-modules
         updateMarketUI();

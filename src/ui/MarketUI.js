@@ -2,6 +2,7 @@ import { state } from '../core/GameState.js';
 import { MarketManager } from '../managers/MarketManager.js';
 import { formatTime } from '../core/Utils.js';
 import { MARKET } from '../core/Constants.js';
+import { parseEmojis, parseEmojisInText } from '../core/EmojiUtils.js';
 
 // --- State Cache ---
 let _lastTimerText = "";
@@ -36,10 +37,11 @@ export function updateMarketUI() {
                     ${rewardText}
                 </p>
             `;
+            parseEmojis(div);
 
             const btn = document.createElement('button');
             btn.className = 'action sell-milk-button';
-            btn.textContent = `Sell ${c.request}🥛`;
+            btn.innerHTML = parseEmojisInText(`Sell ${c.request}🥛`);
             btn.dataset.cost = c.request; 
             btn.dataset.id = c.id;
             // Check affordability immediately
@@ -83,6 +85,7 @@ export function updateMarketUI() {
         // If text changed (or forced by null reset above), update DOM
         if (currentTimerText !== _lastTimerText) {
             timerSlot.innerHTML = currentTimerText;
+            parseEmojis(timerSlot);
             _lastTimerText = currentTimerText;
         }
     }

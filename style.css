@@ -5,6 +5,37 @@
     padding: 0;
 }
 
+/* --- Twemoji Image Sizing --- */
+img.emoji,
+img[class*="emoji"] {
+    height: 1em;
+    width: 1em;
+    margin: 0 .05em 0 .1em;
+    vertical-align: -0.1em;
+    display: inline-block;
+}
+
+/* Context-specific emoji sizing */
+.resource-display img.emoji {
+    height: 1.2em;
+    width: 1.2em;
+    vertical-align: -0.15em;
+}
+
+.tab-button img.emoji {
+    height: 1em;
+    width: 1em;
+    vertical-align: middle;
+}
+
+.customer-entry img.emoji,
+.action img.emoji,
+.upgrade-button img.emoji {
+    height: 1em;
+    width: 1em;
+    vertical-align: -0.1em;
+}
+
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     line-height: 1.6;
@@ -71,12 +102,14 @@ hr {
 /* --- Tab Navigation --- */
 .tab-navigation {
     display: flex;
+    flex-wrap: wrap;
     background-color: #f8f8f8;
     border-bottom: 1px solid #ccc;
 }
 
 .tab-button {
-    flex-grow: 1;
+    flex: 1 1 auto;
+    min-width: 80px;
     padding: 10px 15px;
     border: none;
     border-right: 1px solid #ccc;
@@ -87,10 +120,37 @@ hr {
     font-weight: bold;
     color: #555;
     transition: background-color 0.2s ease, color 0.2s ease;
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 }
 
 .tab-button:last-child {
     border-right: none;
+}
+
+/* Mobile-friendly: Allow tabs to wrap to second row (3 per row) */
+@media (max-width: 600px) {
+    .tab-button {
+        flex: 1 1 calc(33.333% - 0.67px);
+        min-width: calc(33.333% - 0.67px);
+        border-bottom: 1px solid #ccc;
+        border-right: 1px solid #ccc;
+    }
+    
+    /* Remove right border on every 3rd button (right column) */
+    .tab-button:nth-child(3n) {
+        border-right: none;
+    }
+    
+    /* Keep all bottom borders on mobile for consistent grid appearance */
+    /* Active tab will have a special border indicator instead */
+    
+    /* Ensure last button has no right border */
+    .tab-button:last-child {
+        border-right: none;
+    }
 }
 
 .tab-button:hover:not(.locked) {
@@ -107,6 +167,19 @@ hr {
     font-style: normal;
 }
 
+/* Mobile-specific active tab indicator */
+@media (max-width: 600px) {
+    .tab-button.active {
+        border-bottom: 1px solid #ccc;
+        margin-bottom: 0;
+        /* Add a visual indicator - green outline around the active tab */
+        outline: 2px solid #4CAF50;
+        outline-offset: -2px;
+        background-color: #f0f8f0;
+        z-index: 1;
+    }
+}
+
 .tab-button.locked {
     color: #888;
     background-color: #f0f0f0;
@@ -120,6 +193,22 @@ hr {
 .tab-button.locked:hover {
     background-color: #e8e8e8;
     color: #777;
+}
+
+.tab-button .customer-count,
+.tab-button .raw-milk-count,
+.tab-button .upgrade-count {
+    display: block;
+    font-size: 0.4em;
+    font-weight: normal;
+    margin-top: 2px;
+    opacity: 0.8;
+    line-height: 1.2;
+    white-space: nowrap;
+}
+
+.tab-button .unlock-info {
+    white-space: nowrap;
 }
 
 /* --- Tab Content Area --- */
@@ -196,6 +285,7 @@ button + span {
 .button-group {
     margin-bottom: 10px;
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
     gap: 10px;
 }
@@ -559,4 +649,81 @@ button + span {
 
 .auto-toggle-button.active-auto:hover:not(:disabled) {
     background-color: #ec971f;
+}
+
+/* --- Settings & Save System --- */
+.save-info {
+    margin-top: 15px;
+    padding: 10px;
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 0.9em;
+}
+
+.save-info p {
+    margin: 5px 0;
+    color: #444;
+}
+
+.save-info strong {
+    color: #222;
+}
+
+.save-info em {
+    color: #999;
+}
+
+.danger-button {
+    background-color: #d9534f !important;
+}
+
+.danger-button:hover:not(:disabled) {
+    background-color: #c9302c !important;
+}
+
+.danger-button:active:not(:disabled) {
+    background-color: #ac2925 !important;
+}
+
+.autosave-enabled {
+    background-color: #f0ad4e !important;
+}
+
+.autosave-enabled:hover:not(:disabled) {
+    background-color: #ec971f !important;
+}
+
+/* --- Save Notification --- */
+.save-notification {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 12px 20px;
+    background-color: #4CAF50;
+    color: white;
+    border-radius: 4px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    font-weight: bold;
+    font-size: 0.95em;
+    z-index: 2000;
+    opacity: 0;
+    transform: translateY(-20px);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    pointer-events: none;
+}
+
+.save-notification.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Mobile responsiveness for notification */
+@media (max-width: 600px) {
+    .save-notification {
+        top: 10px;
+        right: 10px;
+        left: 10px;
+        text-align: center;
+    }
 }

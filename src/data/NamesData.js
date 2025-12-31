@@ -1,7 +1,7 @@
 export const FEMALE_NAMES = [
                 "Yasmina", "Hanna", "Jits", "Frida", "Esmeralda", "Gabby", "Bariella", "Greetje", "Francel", 
                 "Marcoise", "Freya", "Mireille", "Daphne", "Pandora", "Kabouter Kwebbel", "Eufrazie", "Bobientje",
-                "Arwen", "Sarah", "Tinya"
+                "Arwen", "Sarah", "Tinya", "Alina"
             ]
 export const MALE_NAMES = [
                 "Jens", "Elias", "Jasper", "Simon", "Victór", "Diego", "Geext", "Barry", "Ivo", 

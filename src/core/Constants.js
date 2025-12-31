@@ -15,6 +15,6 @@ export const MARKET = {
 };
 
 export const DEV_CHEATS = {
-    MARKET_SPEED: 1,
-    TAP_BOOST: 1
+    MARKET_SPEED: 5,
+    TAP_BOOST: 5
 }

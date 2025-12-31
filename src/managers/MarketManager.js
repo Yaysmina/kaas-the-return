@@ -53,16 +53,18 @@ export class MarketManager {
         
         var customer;
 
-        // If there is a single customer and it's a Dad, next customer will be a Mom
-        if (customerCount === 1 && dadCount === 1) {customer = this.createMom();}
-
-        // If there are 2 customers and both are Moms, next customer will be a Dad
-        else if (customerCount === 2 && momCount === 2) {customer = this.createDad();}
-
+        // If there are only milk moms and at least 2, next will be a dad
+        if (momCount === customerCount && customerCount >= 2) {
+            customer = this.createDad();
+        }
+        // If there are only dads and at least 1, next will be a mom
+        else if (dadCount === customerCount && customerCount >= 1) {
+            customer = this.createMom();
+        }
         // Otherwise, next customer will be randomly determined
         else {
-        const isMom = Math.random() > 0.3; // 70% chance for Mom
-        customer = isMom ? this.createMom() : this.createDad();
+            const isMom = Math.random() > 0.3; // 70% chance for Mom
+            customer = isMom ? this.createMom() : this.createDad();
         }
         
         state.market.customers.push(customer);

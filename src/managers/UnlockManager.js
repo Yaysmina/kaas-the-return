@@ -27,6 +27,21 @@ export class UnlockManager {
             if (!isSection && !isTab && !isHr) return;
 
             const condition = el.dataset.unlockCondition;
+            
+            // Special handling for upgrades tab: if at least one upgrade has been purchased, keep it unlocked
+            if (isTab && el.dataset.tab === 'tab-upgrades') {
+                const hasUpgrades = state.upgrades.cowCost > 0 || 
+                                   state.upgrades.tapReduction > 0 || 
+                                   state.upgrades.rawMilkReduction > 0;
+                if (hasUpgrades) {
+                    // Keep unlocked if upgrades have been purchased
+                    el.classList.remove('locked', 'subsection-locked', 'subsection-hr-locked');
+                    const info = el.querySelector('.unlock-info');
+                    if (info) info.style.display = 'none';
+                    return;
+                }
+            }
+            
             if (this.checkCondition(condition)) {
                 el.classList.remove('locked', 'subsection-locked', 'subsection-hr-locked');
                 

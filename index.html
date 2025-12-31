@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kaas: The Return</title>
     <link rel="stylesheet" href="./style.css">
+    <script src="https://cdn.jsdelivr.net/npm/twemoji@latest/dist/twemoji.min.js"></script>
 </head>
 <body>
     <div id="game-container">
@@ -13,7 +14,6 @@
         <header class="game-header">
             <h1>Kaas: The Return</h1>
             <div class="resource-display">
-                <span class="resource"><span id="cows-display">0</span>🐄</span>
                 <span class="resource"><span id="milk-display">0</span>🥛</span>
                 <span class="resource"><span id="gold-display">0</span>🪙</span>
                 <span class="resource" id="cow-cash-resource-display" style="display: none;"><span id="cow-cash-display">0</span>💵</span>
@@ -22,12 +22,17 @@
         </header>
 
         <nav class="tab-navigation">
-            <button class="tab-button active" data-tab="tab-farm">🧑‍🌾</button>
+            <button class="tab-button active" data-tab="tab-farm">
+                🧑‍🌾
+                <span class="raw-milk-count" id="farm-raw-milk-count"></span>
+            </button>
             <button class="tab-button locked" data-tab="tab-business" data-unlock-condition="milk:2">
                 🏪 <span class="unlock-info">Need 2🥛</span>
+                <span class="customer-count" id="business-customer-count" style="display: none;"></span>
             </button>
             <button class="tab-button locked" data-tab="tab-upgrades" data-unlock-condition="cowCash:15">
                 ⏫ <span class="unlock-info">Need 15💵</span>
+                <span class="upgrade-count" id="upgrades-count" style="display: none;"></span>
             </button>
              <button class="tab-button locked" data-tab="tab-factory" data-unlock-condition="cows:4">
                 🏭 <span class="unlock-info">Need 4🐄</span>
@@ -129,15 +134,31 @@
             <!-- Settings Tab -->
             <div id="tab-settings" class="tab-pane">
                 <h2>Settings</h2>
-                <p>Options like save, load, reset, volume control. (WIP)</p>
-                <button id="btn-save" class="action">Save Game</button>
-                <button id="btn-load" class="action">Load Game</button>
-                <button id="btn-reset" class="action" style="background-color: #d9534f;">Reset Game</button>
+                
+                <div class="button-group">
+                    <button id="btn-save" class="action">💾 Save Game</button>
+                    <button id="btn-load" class="action">📂 Load Game</button>
+                    <button id="btn-toggle-autosave" class="action">🔄 Enable Autosave (30s)</button>
+                    <button id="btn-delete-progress" class="action danger-button">🗑️ Delete Progress</button>
+                </div>
+                
+                <div id="save-info" class="save-info"></div>
             </div>
             
             <!-- Changelog Tab -->
             <div id="tab-changelog" class="tab-pane">
                 <h2>Changelog</h2>
+
+                <div class="changelog-version">
+                    <p> 31 Dec 2025</p>
+                    <h3>Version 0.3.4: User Experience</h3>
+                    <ul>
+                        <li>🛠️ Implemented Save and Load system</li>
+                        <li>🛠️ Tab buttons now display useful information</li>
+                        <li>🛠️ Emojis now work properly on all platforms</li>
+                        <li>🛠️ Tab buttons are now mobile friendly</li>
+                    </ul>
+                </div>
 
                 <div class="changelog-version">
                     <p> 12 Dec 2025</p>
@@ -261,8 +282,8 @@
 
         <footer class="game-footer">
             <p>Yaysmina</p>
-            <p>Version 0.3.3 - Emoji Update🤯</p>
-            <p>9 Dec 2025</p>
+            <p>Version 0.3.4 - User Experience</p>
+            <p>31 Dec 2025</p>
         </footer>
     </div>
     <!-- Point to the module -->
