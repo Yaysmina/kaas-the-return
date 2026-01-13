@@ -8,5 +8,5 @@ This is a full-scale expansion of the old games.
 - Upgrade machines for new cheese types
 - Serve a very special customer
 
-90% of the code is vibe-coded lol
+90% of the code is vibe-coded lol.
 All ideas by me
