@@ -14,8 +14,8 @@ export class ProductionManager {
     static tap(isManual) {
         if (state.resources.cows <= 0) return;
         
-        let power = 1;
-        if (state.playstyle === 'active' && isManual) power = 2 * DEV_CHEATS.TAP_BOOST;
+        // Tap strength is always 1 by default
+        let power = 1 * DEV_CHEATS.TAP_BOOST;
 
         state.internal.tapsLeft -= power;
 
@@ -53,8 +53,8 @@ export class ProductionManager {
             state.automation.isAutoTapping = false;
             state.automation.intervalId = null;
         } else {
+            // Auto-tap is 4/s by default (1000ms / 4 = 250ms)
             let speed = PRODUCTION.AUTO_TAP_SPEED_MS;
-            if (state.playstyle === 'passive') speed /= 2;
 
             state.automation.isAutoTapping = true;
             state.automation.intervalId = setInterval(() => {

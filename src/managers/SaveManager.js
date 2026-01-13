@@ -13,7 +13,7 @@ export class SaveManager {
      */
     static serialize() {
         return {
-            version: '0.3.3',
+            version: '0.3.4',
             timestamp: Date.now(),
             resources: {
                 gold: state.resources.gold,
@@ -23,7 +23,6 @@ export class SaveManager {
                 cowCash: state.resources.cowCash,
                 factoryFunds: state.resources.factoryFunds
             },
-            playstyle: state.playstyle,
             upgrades: {
                 cowCost: state.upgrades.cowCost,
                 tapReduction: state.upgrades.tapReduction,
@@ -65,11 +64,6 @@ export class SaveManager {
                 state.resources.milk = data.resources.milk || 0;
                 state.resources.cowCash = data.resources.cowCash || 0;
                 state.resources.factoryFunds = data.resources.factoryFunds || 0;
-            }
-
-            // Playstyle
-            if (data.playstyle) {
-                state.playstyle = data.playstyle;
             }
 
             // Upgrades
@@ -175,7 +169,6 @@ export class SaveManager {
             return {
                 version: data.version,
                 timestamp: data.timestamp,
-                playstyle: data.playstyle,
                 cows: data.resources?.cows || 0,
                 totalUpgrades: totalUpgrades
             };
@@ -210,9 +203,6 @@ export class SaveManager {
         state.resources.milk = 0;
         state.resources.cowCash = 0;
         state.resources.factoryFunds = 0;
-
-        // Reset playstyle
-        state.playstyle = null;
 
         // Reset internal state
         state.internal.tapsLeft = PRODUCTION.BASE_TAPS_PER_CYCLE;
@@ -314,4 +304,3 @@ export class SaveManager {
         }, duration);
     }
 }
-

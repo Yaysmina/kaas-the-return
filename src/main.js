@@ -5,7 +5,6 @@ import { MarketManager } from './managers/MarketManager.js';
 import { UnlockManager } from './managers/UnlockManager.js';
 import { SaveManager } from './managers/SaveManager.js';
 import { UIManager } from './ui/UIManager.js';
-import { Components } from './ui/Components.js';
 import { parseAllEmojis } from './core/EmojiUtils.js';
 
 const ui = new UIManager();
@@ -152,26 +151,6 @@ window.addEventListener('DOMContentLoaded', () => {
     // Update save info display
     updateSaveInfo();
 
-    if (!state.playstyle) {
-        const display = document.getElementById('playstyle-display');
-        if (display) {
-            display.textContent = 'Playstyle: Loading...';
-        }
-        Components.showPlaystyleModal((selectedStyle) => {
-            state.playstyle = selectedStyle;
-            const display = document.getElementById('playstyle-display');
-            if (display) {
-                display.textContent = `Playstyle: ${selectedStyle.charAt(0).toUpperCase() + selectedStyle.slice(1)}`;
-            }
-            // Start Loop
-            requestAnimationFrame(gameLoop);
-        });
-    } else {
-        // Update playstyle display when loading from save
-        const display = document.getElementById('playstyle-display');
-        if (display) {
-            display.textContent = `Playstyle: ${state.playstyle.charAt(0).toUpperCase() + state.playstyle.slice(1)}`;
-        }
-        requestAnimationFrame(gameLoop);
-    } 
+    // Start Loop immediately (no playstyle selection needed)
+    requestAnimationFrame(gameLoop);
 });

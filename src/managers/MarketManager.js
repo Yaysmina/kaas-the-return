@@ -85,7 +85,7 @@ export class MarketManager {
             name,
             sequence: state.market.momSequence,
             request: req,
-            rewardGold: 10 + Math.floor(req / 2),
+            rewardGold: 10 + req,
             rewardCowCash: 1
         };
     }

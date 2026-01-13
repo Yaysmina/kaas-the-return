@@ -27,46 +27,5 @@ export const Components = {
         modal.appendChild(content);
         document.body.appendChild(modal);
         return modal;
-    },
-
-    /**
-     * Specific component for the Playstyle Selection.
-     * @param {Function} onSelect - Callback function(styleString)
-     */
-    showPlaystyleModal(onSelect) {
-        const html = `
-            <h2 style="margin-bottom: 15px; color: #333;">Choose Your Path</h2>
-            
-            <div style="margin-bottom: 20px; padding: 15px; background: #f9f9f9; border: 1px solid #ddd; border-radius: 4px;">
-                <h3 style="color: #4CAF50;">Active Playstyle</h3>
-                <p style="font-size: 0.9em; color: #666; margin-bottom: 10px;">
-                    Your manual clicks are <strong>x2 more effective</strong>.
-                </p>
-                <button class="action" id="comp-select-active" style="width: 100%;">Select Active</button>
-            </div>
-
-            <div style="margin-bottom: 20px; padding: 15px; background: #f9f9f9; border: 1px solid #ddd; border-radius: 4px;">
-                <h3 style="color: #5bc0de;">Passive Playstyle</h3>
-                <p style="font-size: 0.9em; color: #666; margin-bottom: 10px;">
-                    Auto-Tap works <strong>x2 faster</strong>.
-                </p>
-                <button class="action" id="comp-select-passive" style="width: 100%; background-color: #5bc0de;">Select Passive</button>
-            </div>
-            
-            <p style="font-size: 0.8em; color: #999; font-style: italic;">
-                You can change this later in Settings (Coming Soon).
-            </p>
-        `;
-
-        const modal = this.createModal('playstyle-modal', html);
-
-        // Attach listeners
-        const handleSelection = (style) => {
-            onSelect(style);
-            document.body.removeChild(modal);
-        };
-
-        modal.querySelector('#comp-select-active').onclick = () => handleSelection('active');
-        modal.querySelector('#comp-select-passive').onclick = () => handleSelection('passive');
     }
 };

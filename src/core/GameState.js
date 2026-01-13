@@ -11,8 +11,6 @@ class GameState {
             factoryFunds: 0
         };
         
-        this.playstyle = null; // 'active' | 'passive'
-        
         this.internal = {
             tapsLeft: PRODUCTION.BASE_TAPS_PER_CYCLE,
             lastTick: Date.now(),
