@@ -11,6 +11,11 @@ export class ProductionManager {
         return UpgradeManager.getEffect('rawMilkReduction');
     }
 
+    static getCurrentAutoTapSpeed() {
+        // Returns the auto-tap speed in taps per second
+        return 1000 / PRODUCTION.AUTO_TAP_SPEED_MS;
+    }
+
     static tap(isManual) {
         if (state.resources.cows <= 0) return;
         

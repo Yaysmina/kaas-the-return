@@ -87,11 +87,19 @@ export class UIManager {
 
         // Buttons
         const canMilk = state.resources.cows > 0;
-        this.get('make-raw-milk-button').disabled = !canMilk || state.automation.isAutoTapping;
+        // Manual tap button is always enabled when you have cows (no longer disabled by auto-tap)
+        this.get('make-raw-milk-button').disabled = !canMilk;
         
         const autoBtn = this.get('toggle-auto-tap-button');
         autoBtn.disabled = !canMilk;
-        autoBtn.textContent = state.automation.isAutoTapping ? "Auto-Tap ON" : "Auto-Tap Off";
+        
+        // Update auto-tap button text to show speed
+        if (state.automation.isAutoTapping) {
+            const speed = ProductionManager.getCurrentAutoTapSpeed();
+            autoBtn.textContent = `Auto-Tap ON (${speed}/s)`;
+        } else {
+            autoBtn.textContent = "Auto-Tap Off";
+        }
         
         this.get('process-milk-button').disabled = state.resources.rawMilk < milkCost;
         this.get('process-all-milk-button').disabled = state.resources.rawMilk < milkCost;

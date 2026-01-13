@@ -18,8 +18,8 @@ export const UPGRADES = {
             const costs = [3, 6, 9, 18, 27, 54, 81, 162];
             return costs[level] || costs[costs.length - 1];
         },
-        getEffect: (level) => Math.max(2, PRODUCTION.BASE_TAPS_PER_CYCLE - level * 2),
-        effectDisplay: (level) => `${Math.max(2, PRODUCTION.BASE_TAPS_PER_CYCLE - level * 2)} Taps`
+        getEffect: (level) => Math.max(2, PRODUCTION.BASE_TAPS_PER_CYCLE - level),
+        effectDisplay: (level) => `${Math.max(2, PRODUCTION.BASE_TAPS_PER_CYCLE - level)} Taps`
     },
     rawMilkReduction: {
         name: "Raw Milk Reduction",

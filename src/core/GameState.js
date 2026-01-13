@@ -35,6 +35,11 @@ class GameState {
             momSequence: 0,
             lastDadRequest: 0
         };
+
+        // Track unlocked tabs that should persist
+        this.unlocks = {
+            businessTab: false
+        };
     }
 }
 

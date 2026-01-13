@@ -41,6 +41,22 @@ export class UnlockManager {
                     return;
                 }
             }
+
+            // Special handling for business tab: once unlocked, stay unlocked
+            if (isTab && el.dataset.tab === 'tab-business') {
+                // If the tab is currently unlocked and we haven't recorded it, mark it as unlocked
+                if (!state.unlocks.businessTab && this.checkCondition(condition)) {
+                    state.unlocks.businessTab = true;
+                }
+                
+                // If it was unlocked before, keep it unlocked regardless of current resources
+                if (state.unlocks.businessTab) {
+                    el.classList.remove('locked', 'subsection-locked', 'subsection-hr-locked');
+                    const info = el.querySelector('.unlock-info');
+                    if (info) info.style.display = 'none';
+                    return;
+                }
+            }
             
             if (this.checkCondition(condition)) {
                 el.classList.remove('locked', 'subsection-locked', 'subsection-hr-locked');

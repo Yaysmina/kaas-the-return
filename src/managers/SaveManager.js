@@ -13,7 +13,7 @@ export class SaveManager {
      */
     static serialize() {
         return {
-            version: '0.3.4',
+            version: '0.3.5',
             timestamp: Date.now(),
             resources: {
                 gold: state.resources.gold,
@@ -42,6 +42,9 @@ export class SaveManager {
                 dadSequence: state.market.dadSequence,
                 momSequence: state.market.momSequence,
                 lastDadRequest: state.market.lastDadRequest
+            },
+            unlocks: {
+                businessTab: state.unlocks.businessTab
             }
         };
     }
@@ -98,6 +101,11 @@ export class SaveManager {
                 state.market.dadSequence = data.market.dadSequence || 0;
                 state.market.momSequence = data.market.momSequence || 0;
                 state.market.lastDadRequest = data.market.lastDadRequest || 0;
+            }
+
+            // Unlocks
+            if (data.unlocks) {
+                state.unlocks.businessTab = data.unlocks.businessTab || false;
             }
 
             console.log('Game loaded successfully');
@@ -227,6 +235,9 @@ export class SaveManager {
         state.market.dadSequence = 0;
         state.market.momSequence = 0;
         state.market.lastDadRequest = 0;
+
+        // Reset unlocks
+        state.unlocks.businessTab = false;
 
         console.log('Game reset to initial state');
     }
