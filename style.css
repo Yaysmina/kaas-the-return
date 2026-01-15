@@ -131,7 +131,7 @@ hr {
 }
 
 /* Mobile-friendly: Allow tabs to wrap to second row (3 per row) */
-@media (max-width: 600px) {
+@media (max-width: 800px) {
     .tab-button {
         flex: 1 1 calc(33.333% - 0.67px);
         min-width: calc(33.333% - 0.67px);
@@ -168,7 +168,7 @@ hr {
 }
 
 /* Mobile-specific active tab indicator */
-@media (max-width: 600px) {
+@media (max-width: 800px) {
     .tab-button.active {
         border-bottom: 1px solid #ccc;
         margin-bottom: 0;
@@ -719,11 +719,13 @@ button + span {
 }
 
 /* Mobile responsiveness for notification */
-@media (max-width: 600px) {
+@media (max-width: 800px) {
     .save-notification {
         top: 10px;
         right: 10px;
-        left: 10px;
+        left: auto;
+        padding: 8px 12px;
+        font-size: 0.8em;
         text-align: center;
     }
 }

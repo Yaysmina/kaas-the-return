@@ -14,7 +14,7 @@ export class SaveManager {
      */
     static serialize() {
         return {
-            version: '0.3.5',
+            version: '0.3.6',
             timestamp: Date.now(),
             resources: {
                 gold: state.resources.gold,
@@ -260,7 +260,7 @@ export class SaveManager {
 
         this.autosaveIntervalId = setInterval(() => {
             if (this.save()) {
-                this.showNotification('Game autosaved');
+                this.showNotification('💾');
                 // Update save info display if callback is set
                 if (this.updateSaveInfoCallback) {
                     this.updateSaveInfoCallback();
