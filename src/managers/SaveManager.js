@@ -1,5 +1,6 @@
 import { state } from '../core/GameState.js';
 import { COSTS, PRODUCTION } from '../core/Constants.js';
+import { UpgradeManager } from './UpgradeManager.js';
 
 const SAVE_KEY = 'kaas-the-return-save';
 const AUTOSAVE_INTERVAL = 30000; // 30 seconds

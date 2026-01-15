@@ -104,6 +104,14 @@ export class UIManager {
         this.get('process-milk-button').disabled = state.resources.rawMilk < milkCost;
         this.get('process-all-milk-button').disabled = state.resources.rawMilk < milkCost;
 
+        // Show Process All button when factory is unlocked (4 cows)
+        const factoryUnlocked = state.resources.cows >= 4;
+        this.get('process-milk-button').style.display = factoryUnlocked ? 'none' : 'inline-block';
+        this.get('process-all-milk-button').style.display = factoryUnlocked ? 'inline-block' : 'none';
+        if (factoryUnlocked) {
+            this.get('process-all-milk-button').innerHTML = parseEmojisInText(`Process All (${milkCost} Raw🥛 each)`);
+        }
+
         // Upgrades
         Object.keys(UPGRADES).forEach(key => {
             const def = UPGRADES[key];

@@ -31,7 +31,8 @@ export class ProductionManager {
             
             // Reset taps (handling overflow could be added here)
             const maxTaps = this.getCurrentTapsPerCycle();
-            state.internal.tapsLeft = maxTaps + state.internal.tapsLeft; 
+            state.internal.tapsLeft = maxTaps + state.internal.tapsLeft;
+            state.internal.tapsLeft = Math.min(state.internal.tapsLeft, maxTaps);
         }
     }
 

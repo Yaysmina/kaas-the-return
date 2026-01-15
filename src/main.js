@@ -67,15 +67,14 @@ document.getElementById('btn-delete-progress').onclick = () => {
         SaveManager.showNotification('No save file to delete');
         return;
     }
-    
+
     if (confirm('⚠️ WARNING ⚠️\n\nThis will permanently delete your saved game!\n\nAre you absolutely sure?')) {
-        if (confirm('This action cannot be undone. Delete save file?')) {
-            if (SaveManager.deleteSave()) {
-                SaveManager.showNotification('Save deleted successfully');
-                updateSaveInfo();
-            } else {
-                SaveManager.showNotification('Failed to delete save');
-            }
+        if (SaveManager.deleteSave()) {
+            SaveManager.showNotification('Save deleted successfully');
+            updateSaveInfo();
+            location.reload();
+        } else {
+            SaveManager.showNotification('Failed to delete save');
         }
     }
 };

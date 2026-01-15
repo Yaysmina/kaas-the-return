@@ -77,7 +77,13 @@ export class MarketManager {
         state.market.momSequence++;
         const name = FEMALE_NAMES[Math.floor(Math.random() * FEMALE_NAMES.length)];
         // The n-th mom will request a random amount between n and 2*n
-        const req = Math.round(Math.random() * state.market.momSequence) + state.market.momSequence;
+        const baseReq = Math.round(Math.random() * state.market.momSequence) + state.market.momSequence;
+        
+        // If there are already 5 or more milk moms generated, add +(generated-5) to the cost
+        let req = baseReq;
+        if (state.market.momSequence >= 5) {
+            req += (state.market.momSequence - 5);
+        }
         
         return {
             id: generateId('mom'),
@@ -85,29 +91,48 @@ export class MarketManager {
             name,
             sequence: state.market.momSequence,
             request: req,
-            rewardGold: 10 + req,
+            rewardGold: 10 + baseReq,
             rewardCowCash: 1
         };
     }
 
-    static createDad() {
-        state.market.dadSequence++;
-        const name = MALE_NAMES[Math.floor(Math.random() * MALE_NAMES.length)];
+static createDad() {
+    const { market } = state;
+    market.dadSequence++;
 
-        let req = state.market.lastDadRequest;
-        if (req === 0 || Math.random() < 0.7) req += 5; // If last request was 0, or 70% chance, add 5
-        state.market.lastDadRequest = req;
+    const name = MALE_NAMES[Math.floor(Math.random() * MALE_NAMES.length)];
+    const dadCount = market.customers.filter(c => c.type === 'Dad').length;
+    
+    let req = market.lastDadRequest;
 
-        return {
-            id: generateId('dad'),
-            type: 'Dad',
-            name,
-            sequence: state.market.dadSequence,
-            request: req,
-            rewardGold: 4 + (req / 5),
-            rewardCowCash: 4 + (req / 5)
-        };
+    if (req === 0) {
+        req = 5;
+    } else {
+        // Calculate how many +5 increments to add
+        // 60% base + 5% per existing dad
+        const chanceMultiplier = (60 + (5 * dadCount)) / 100; 
+        
+        const guaranteedIncrements = Math.floor(chanceMultiplier);
+        const extraRoll = Math.random() < (chanceMultiplier % 1) ? 1 : 0;
+        
+        req += (guaranteedIncrements + extraRoll) * 5;
     }
+
+    market.lastDadRequest = req;
+
+    // Both rewards follow the same formula
+    const reward = 4 + (req / 5);
+
+    return {
+        id: generateId('dad'),
+        type: 'Dad',
+        name,
+        sequence: market.dadSequence,
+        request: req,
+        rewardGold: reward,
+        rewardCowCash: reward
+    };
+}
 
     static sell(customerId) {
         const idx = state.market.customers.findIndex(c => c.id === customerId);
