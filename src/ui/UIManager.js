@@ -40,14 +40,20 @@ export class UIManager {
         const container = document.getElementById('cow-cash-upgrades-container');
         
         Object.keys(UPGRADES).forEach(key => {
-            const def = UPGRADES[key];
+            const def = UPGRADES[key];  
             const div = document.createElement('div');
             div.className = 'upgrade-item';
             div.innerHTML = `
                 <h4>${def.name}</h4>
-                <p>${def.description}</p>
-                <p>Level: <span id="upg-lvl-${key}">0</span>/${def.maxLevel}</p>
-                <p>Currently: <span id="upg-eff-${key}">-</span></p>
+                <p class="upgrade-description">${def.description}</p>
+                <div class="stat-row">
+                    <span class="stat-label">Level</span>
+                    <span class="stat-value"><span id="upg-lvl-${key}">0</span>/${def.maxLevel}</span>
+                </div>
+                <div class="stat-row">
+                    <span class="stat-label">Currently</span>
+                    <span class="stat-value" id="upg-eff-${key}">-</span>
+                </div>
                 <button class="upgrade-button" id="upg-btn-${key}">Purchase</button>
             `;
             parseEmojis(div);
@@ -65,8 +71,10 @@ export class UIManager {
         this.get('milk-display').textContent = state.resources.milk;
         this.get('cow-cash-display').textContent = Math.floor(state.resources.cowCash);
         
-        // Resource Visibility
-        this.get('cow-cash-resource-display').style.display = state.resources.cowCash > 0 ? 'inline' : 'none';
+        // Resource Visibility logic
+        const businessTabBtn = document.querySelector('button[data-tab="tab-business"]');
+        const isBusinessUnlocked = businessTabBtn && !businessTabBtn.classList.contains('locked');
+        this.get('cow-cash-resource-display').style.display = (state.resources.cowCash > 0 || isBusinessUnlocked) ? 'inline' : 'none';
 
         // Farm Section
         this.get('cows-count-farm').textContent = state.resources.cows;
@@ -85,15 +93,20 @@ export class UIManager {
         this.get('milk-count-farm').textContent = state.resources.milk;
         this.get('effective-raw-milk-cost-display').textContent = milkCost;
 
+        // Progress Bar
+        const progressBar = this.get('tap-progress-bar');
+        if (progressBar) {
+            const progress = ((tapsMax - state.internal.tapsLeft) / tapsMax) * 100;
+            progressBar.style.width = `${Math.min(100, Math.max(0, progress))}%`;
+        }
+
         // Buttons
         const canMilk = state.resources.cows > 0;
-        // Manual tap button is always enabled when you have cows (no longer disabled by auto-tap)
         this.get('make-raw-milk-button').disabled = !canMilk;
         
         const autoBtn = this.get('toggle-auto-tap-button');
         autoBtn.disabled = !canMilk;
         
-        // Update auto-tap button text to show speed
         if (state.automation.isAutoTapping) {
             const speed = ProductionManager.getCurrentAutoTapSpeed();
             autoBtn.textContent = `Auto-Tap ON (${speed}/s)`;
@@ -104,7 +117,6 @@ export class UIManager {
         this.get('process-milk-button').disabled = state.resources.rawMilk < milkCost;
         this.get('process-all-milk-button').disabled = state.resources.rawMilk < milkCost;
 
-        // Show Process All button when factory is unlocked (4 cows)
         const factoryUnlocked = state.resources.cows >= 4;
         this.get('process-milk-button').style.display = factoryUnlocked ? 'none' : 'inline-block';
         this.get('process-all-milk-button').style.display = factoryUnlocked ? 'inline-block' : 'none';
@@ -120,7 +132,6 @@ export class UIManager {
             
             this.get(`upg-lvl-${key}`).textContent = level;
             
-            // For effect display, we might need specific logic or pass constants
             let baseVal = 0;
             if (key === 'tapReduction') baseVal = PRODUCTION.BASE_TAPS_PER_CYCLE;
             if (key === 'rawMilkReduction') baseVal = COSTS.PROCESS_MILK;
@@ -143,19 +154,17 @@ export class UIManager {
         const rawMilkCountSpan = document.getElementById('farm-raw-milk-count');
         if (rawMilkCountSpan) {
             const rawMilkCount = state.resources.rawMilk;
-            rawMilkCountSpan.innerHTML = parseEmojisInText(`${rawMilkCount} raw🥛`);
-            rawMilkCountSpan.style.display = 'block';
+            rawMilkCountSpan.textContent = rawMilkCount > 0 ? rawMilkCount : '';
+            rawMilkCountSpan.style.display = rawMilkCount > 0 ? 'block' : 'none';
         }
 
         // Business Tab Customer Count
-        const businessTabBtn = document.querySelector('button[data-tab="tab-business"]');
         const customerCountSpan = document.getElementById('business-customer-count');
         if (businessTabBtn && customerCountSpan) {
-            const isUnlocked = !businessTabBtn.classList.contains('locked');
-            if (isUnlocked) {
+            if (isBusinessUnlocked) {
                 const customerCount = state.market.customers.length;
-                customerCountSpan.textContent = `${customerCount} ${customerCount === 1 ? 'customer' : 'costumers'}`;
-                customerCountSpan.style.display = 'block';
+                customerCountSpan.textContent = customerCount > 0 ? customerCount : '';
+                customerCountSpan.style.display = customerCount > 0 ? 'block' : 'none';
             } else {
                 customerCountSpan.style.display = 'none';
             }
@@ -167,7 +176,6 @@ export class UIManager {
         if (upgradesTabBtn && upgradeCountSpan) {
             const isUnlocked = !upgradesTabBtn.classList.contains('locked');
             if (isUnlocked) {
-                // Count available upgrades (not max level and affordable)
                 let availableCount = 0;
                 Object.keys(UPGRADES).forEach(key => {
                     const def = UPGRADES[key];
@@ -179,14 +187,13 @@ export class UIManager {
                         }
                     }
                 });
-                upgradeCountSpan.textContent = `${availableCount} ${availableCount === 1 ? 'upgrade' : 'upgrades'}`;
-                upgradeCountSpan.style.display = 'block';
+                upgradeCountSpan.textContent = availableCount > 0 ? availableCount : '';
+                upgradeCountSpan.style.display = availableCount > 0 ? 'block' : 'none';
             } else {
                 upgradeCountSpan.style.display = 'none';
             }
         }
 
-        // Sub-modules
         updateMarketUI();
     }
 }

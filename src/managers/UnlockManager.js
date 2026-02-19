@@ -58,6 +58,16 @@ export class UnlockManager {
                 }
             }
             
+            // Special handling for factory tab: hide unlock info when condition is met
+            if (isTab && el.dataset.tab === 'tab-factory') {
+                if (this.checkCondition(condition)) {
+                    el.classList.remove('locked', 'subsection-locked', 'subsection-hr-locked');
+                    const info = el.querySelector('.unlock-info');
+                    if (info) info.style.display = 'none';
+                    return;
+                }
+            }
+            
             if (this.checkCondition(condition)) {
                 el.classList.remove('locked', 'subsection-locked', 'subsection-hr-locked');
                 

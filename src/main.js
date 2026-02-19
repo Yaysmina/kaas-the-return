@@ -19,30 +19,29 @@ document.getElementById('process-all-milk-button').onclick = () => ProductionMan
 // Save/Load Event Bindings
 document.getElementById('btn-save').onclick = () => {
     if (SaveManager.save()) {
-        SaveManager.showNotification('Game saved successfully! ✓');
-        // updateSaveInfo() is now called automatically by SaveManager.save()
+        SaveManager.showNotification('💾 Game saved successfully!');
     } else {
-        SaveManager.showNotification('Failed to save game ✗');
+        SaveManager.showNotification('❌ Failed to save game');
     }
 };
 
 document.getElementById('btn-load').onclick = () => {
     if (!SaveManager.hasSave()) {
-        SaveManager.showNotification('No save file found');
+        SaveManager.showNotification('❓ No save file found');
         return;
     }
     
     if (confirm('Load saved game? Any unsaved progress will be lost.')) {
         const result = SaveManager.load();
         if (result.success) {
-            SaveManager.showNotification('Game loaded successfully! ✓');
+            SaveManager.showNotification('📂 Game loaded successfully!');
             updateSaveInfo();
             // Restart auto-tap if it was enabled
             if (result.wasAutoTapping) {
                 ProductionManager.toggleAutoTap();
             }
         } else {
-            SaveManager.showNotification('Failed to load game ✗');
+            SaveManager.showNotification('❌ Failed to load game');
         }
     }
 };
@@ -53,28 +52,28 @@ document.getElementById('btn-toggle-autosave').onclick = () => {
         SaveManager.stopAutosave();
         btn.textContent = '🔄 Enable Autosave (30s)';
         btn.classList.remove('autosave-enabled');
-        SaveManager.showNotification('Autosave disabled');
+        SaveManager.showNotification('⏹️ Autosave disabled');
     } else {
         SaveManager.startAutosave();
         btn.textContent = '⏸️ Disable Autosave';
         btn.classList.add('autosave-enabled');
-        SaveManager.showNotification('Autosave enabled (30s interval)');
+        SaveManager.showNotification('▶️ Autosave enabled');
     }
 };
 
 document.getElementById('btn-delete-progress').onclick = () => {
     if (!SaveManager.hasSave()) {
-        SaveManager.showNotification('No save file to delete');
+        SaveManager.showNotification('❓ No save file to delete');
         return;
     }
 
     if (confirm('⚠️ WARNING ⚠️\n\nThis will permanently delete your saved game!\n\nAre you absolutely sure?')) {
         if (SaveManager.deleteSave()) {
-            SaveManager.showNotification('Save deleted successfully');
+            SaveManager.showNotification('🗑️ Save deleted successfully');
             updateSaveInfo();
             location.reload();
         } else {
-            SaveManager.showNotification('Failed to delete save');
+            SaveManager.showNotification('❌ Failed to delete save');
         }
     }
 };

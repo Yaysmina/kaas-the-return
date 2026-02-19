@@ -1,314 +1,423 @@
 <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kaas: The Return</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="./style.css">
     <script src="https://cdn.jsdelivr.net/npm/twemoji@latest/dist/twemoji.min.js"></script>
 </head>
 <body>
     <div id="game-container">
-        <!-- Exact same structure as your original file -->
+        <aside class="sidebar">
+            <div class="sidebar-brand">
+                <h1>Kaas: The Return</h1>
+            </div>
+            <nav class="tab-navigation">
+                <button class="tab-button active" data-tab="tab-farm">
+                    <span class="tab-icon">🧑‍🌾</span>
+                    <span class="tab-label">Farm</span>
+                    <span class="badge" id="farm-raw-milk-count"></span>
+                </button>
+                <button class="tab-button locked" data-tab="tab-business" data-unlock-condition="milk:2">
+                    <span class="tab-icon">🏪</span>
+                    <span class="tab-label">Business</span>
+                    <span class="unlock-info">Need 2🥛</span>
+                    <span class="badge" id="business-customer-count" style="display: none;"></span>
+                </button>
+                <button class="tab-button locked" data-tab="tab-upgrades" data-unlock-condition="cowCash:15">
+                    <span class="tab-icon">⏫</span>
+                    <span class="tab-label">Upgrades</span>
+                    <span class="unlock-info">Need 15💵</span>
+                    <span class="badge" id="upgrades-count" style="display: none;"></span>
+                </button>
+                <button class="tab-button locked" data-tab="tab-factory" data-unlock-condition="cows:4">
+                    <span class="tab-icon">🏭</span>
+                    <span class="tab-label">Factory</span>
+                    <span class="unlock-info">Need 4🐄</span>
+                </button>
+                <button class="tab-button" data-tab="tab-settings">
+                    <span class="tab-icon">⚙️</span>
+                    <span class="tab-label">Settings</span>
+                </button>
+                <button class="tab-button" data-tab="tab-changelog">
+                    <span class="tab-icon">❓</span>
+                    <span class="tab-label">Changelog</span>
+                </button>
+            </nav>
+        </aside>
+
         <header class="game-header">
-            <h1>Kaas: The Return</h1>
             <div class="resource-display">
-                <span class="resource"><span id="milk-display">0</span>🥛</span>
-                <span class="resource"><span id="gold-display">0</span>🪙</span>
-                <span class="resource" id="cow-cash-resource-display" style="display: none;"><span id="cow-cash-display">0</span>💵</span>
-                <span class="resource" id="factory-funds-resource-display" style="display: none;"> | Factory Funds: <span id="factory-funds-display">0</span></span>
+                <div class="resource"><span id="milk-display">0</span>🥛</div>
+                <div class="resource"><span id="gold-display">0</span>🪙</div>
+                <div class="resource" id="cow-cash-resource-display" style="display: none;"><span id="cow-cash-display">0</span>💵</div>
+                <div class="resource" id="factory-funds-resource-display" style="display: none;">Factory Funds: <span id="factory-funds-display">0</span></div>
             </div>
         </header>
-
-        <nav class="tab-navigation">
-            <button class="tab-button active" data-tab="tab-farm">
-                🧑‍🌾
-                <span class="raw-milk-count" id="farm-raw-milk-count"></span>
-            </button>
-            <button class="tab-button locked" data-tab="tab-business" data-unlock-condition="milk:2">
-                🏪 <span class="unlock-info">Need 2🥛</span>
-                <span class="customer-count" id="business-customer-count" style="display: none;"></span>
-            </button>
-            <button class="tab-button locked" data-tab="tab-upgrades" data-unlock-condition="cowCash:15">
-                ⏫ <span class="unlock-info">Need 15💵</span>
-                <span class="upgrade-count" id="upgrades-count" style="display: none;"></span>
-            </button>
-             <button class="tab-button locked" data-tab="tab-factory" data-unlock-condition="cows:4">
-                🏭 <span class="unlock-info">Need 4🐄</span>
-            </button>
-            <button class="tab-button" data-tab="tab-settings">⚙️</button>
-            <button class="tab-button" data-tab="tab-changelog">❓</button>
-        </nav>
 
         <main class="tab-content-area">
             <!-- Farm Tab -->
             <div id="tab-farm" class="tab-pane active">
-                <h2>Farm</h2>
-                <div id="farm-cow-caring">
-                    <h3>Cow Caring</h3>
-                    <p>You currently have <span id="cows-count-farm">0</span>🐄</p>
-                    <button id="buy-cow-button" class="action">Buy Cow</button>
-                    <span>Cost: <span id="effective-cow-cost-display">50</span>🪙</span>
-                </div>
-                
-                <hr id="farm-milk-hr" class="subsection-hr-locked" data-unlock-condition="cows:1">
-                
-                <div id="farm-milk-making" class="subsection-locked" data-unlock-condition="cows:1">
-                    <span class="unlock-info subsection-unlock-info">Requires 1 Cow</span>
-                    <h3>Milk Making</h3>
-                    <p>Taps left: <span id="taps-left">0</span> / <span id="current-taps-per-cycle-display">0</span></p>
-                    <div class="button-group">
-                        <button id="make-raw-milk-button" class="action" disabled>Milk your Cows</button>
-                        <button id="toggle-auto-tap-button" class="action auto-toggle-button" disabled>Auto-Tap Off</button>
-                    </div>
-                    <span>+<span id="cows-milk-yield">0</span> Raw🥛each cycle</span>
-                    <p>You have <span id="raw-milk-count">0</span> Raw🥛</p>
-                    <div class="button-group">
-                        <button id="process-milk-button" class="action" disabled>Process <span id="effective-raw-milk-cost-display">10</span> Raw🥛</button>
-                        <button id="process-all-milk-button" class="action" style="display: none;">Process All</button>
-                    </div>
-                    <p>You have <span id="milk-count-farm">0</span>🥛</p>
-                </div>
+                <h2>Farm Management</h2>
+                <div class="game-grid">
+                    <!-- Production Column -->
+                    <div class="column">
+                        <div id="farm-milk-making" class="subsection-locked" data-unlock-condition="cows:1">
+                            <span class="unlock-info subsection-unlock-info">Requires 1 Cow</span>
+                            <div class="card">
+                                <h3>Milk Production</h3>
+                                <div class="big-action-container">
+                                    <button id="make-raw-milk-button" class="big-tap-button" disabled>🥛</button>
+                                    <p>Tap to Milk!</p>
+                                </div>
+                                <div class="progress-container">
+                                    <div id="tap-progress-bar" class="progress-bar"></div>
+                                </div>
+                                <div class="stat-row">
+                                    <span class="stat-label">Taps Remaining</span>
+                                    <span class="stat-value"><span id="taps-left">0</span> / <span id="current-taps-per-cycle-display">0</span></span>
+                                </div>
+                                <div class="stat-row">
+                                    <span class="stat-label">Yield per Cycle</span>
+                                    <span class="stat-value">+<span id="cows-milk-yield">0</span> Raw🥛</span>
+                                </div>
+                                <div class="button-group" style="margin-top: 16px;">
+                                    <button id="toggle-auto-tap-button" class="action secondary" style="width: 100%;" disabled>Auto-Tap Off</button>
+                                </div>
+                            </div>
+                        </div>
 
-                <hr id="farm-ripe-hr" class="subsection-hr-locked" data-unlock-condition="cows:7">
-                <div id="farm-ripe-milk" class="subsection-locked" data-unlock-condition="cows:7">
-                    <span class="unlock-info subsection-unlock-info">Requires 7 Cows</span>
-                    <h3>Ripening Room</h3>
-                    <p>Here will be the ability to make ripe milk.</p>
+                        <div class="card" id="farm-cow-caring">
+                            <h3>Cow Caring</h3>
+                            <div class="stat-row">
+                                <span class="stat-label">Total Cows</span>
+                                <span class="stat-value"><span id="cows-count-farm">0</span>🐄</span>
+                            </div>
+                            <div class="stat-row">
+                                <span class="stat-label">Next Cow Cost</span>
+                                <span class="stat-value"><span id="effective-cow-cost-display">50</span>🪙</span>
+                            </div>
+                            <div class="button-group" style="margin-top: 20px;">
+                                <button id="buy-cow-button" class="action" style="width: 100%;">Buy Cow</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Processing Column -->
+                    <div class="column">
+                        <div id="farm-processing" class="subsection-locked" data-unlock-condition="cows:1">
+                            <span class="unlock-info subsection-unlock-info">Requires 1 Cow</span>
+                            <div class="card">
+                                <h3>Dairy Processing</h3>
+                                <div class="stat-row">
+                                    <span class="stat-label">Raw Milk Stock</span>
+                                    <span class="stat-value"><span id="raw-milk-count">0</span>🥛</span>
+                                </div>
+                                <div class="stat-row">
+                                    <span class="stat-label">Processed Milk</span>
+                                    <span class="stat-value"><span id="milk-count-farm">0</span>🥛</span>
+                                </div>
+                                <hr>
+                                <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 12px;">
+                                    Process raw milk into sellable milk.
+                                </p>
+                                <div class="button-group">
+                                    <button id="process-milk-button" class="action" style="width: 100%;" disabled>Process <span id="effective-raw-milk-cost-display">10</span> Raw🥛</button>
+                                    <button id="process-all-milk-button" class="action" style="width: 100%; display: none;">Process All</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="farm-ripe-milk" class="subsection-locked" data-unlock-condition="cows:7">
+                            <span class="unlock-info subsection-unlock-info">Requires 7 Cows</span>
+                            <div class="card">
+                                <h3>Ripening Room</h3>
+                                <p>Advanced dairy aging facilities coming soon.</p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
 
             <!-- Business Tab -->
             <div id="tab-business" class="tab-pane">
-                <h2>Business</h2>
-                <div id="business-milk-market">
+                <h2>Marketplace</h2>
+                <div class="card" id="business-milk-market">
                     <h3>Milk Market</h3>
-                    <p>Sell 🥛 to visiting Moms and Dads to earn 🪙 and 💵</p>
+                    <p style="margin-bottom: 20px; color: var(--text-muted);">Sell your processed milk to local customers.</p>
                     <div id="customer-queue">
                         <!-- Customers and timer injected via JS -->
                     </div>
                 </div>
-                <hr id="business-cheese-hr" class="subsection-hr-locked" data-unlock-condition="cows:4">
-                <div id="business-cheese-corner" class="subsection-locked" data-unlock-condition="cows:4">
-                    <span class="unlock-info subsection-unlock-info">Requires 4 Cows (Factory)</span>
-                    <h3>Cheese Corner</h3>
-                    <p>Sell Cheese here.</p>
-                </div>
-                <hr id="business-gourmet-hr" class="subsection-hr-locked" data-unlock-condition="cows:7">
-                <div id="business-gourmet-goods" class="subsection-locked" data-unlock-condition="cows:7">
-                    <span class="unlock-info subsection-unlock-info">Requires 7 Cows (Premium Production)</span>
-                    <h3>Gourmet Goods</h3>
-                    <p>Sell Premium Cheese here.</p>
+                
+                <div class="game-grid">
+                    <div id="business-cheese-corner" class="subsection-locked" data-unlock-condition="cows:4">
+                        <span class="unlock-info subsection-unlock-info">Requires 4 Cows (Factory)</span>
+                        <div class="card">
+                            <h3>Cheese Corner</h3>
+                            <p>Sell artisanal cheese here.</p>
+                        </div>
+                    </div>
+                    <div id="business-gourmet-goods" class="subsection-locked" data-unlock-condition="cows:7">
+                        <span class="unlock-info subsection-unlock-info">Requires 7 Cows (Premium Production)</span>
+                        <div class="card">
+                            <h3>Gourmet Goods</h3>
+                            <p>Sell premium aged products here.</p>
+                        </div>
+                    </div>
                 </div>
             </div>
 
             <!-- Upgrades Tab -->
             <div id="tab-upgrades" class="tab-pane">
                 <h2>Upgrades</h2>
-                <div id="upgrades-cow-cash">
-                    <h3>Cow Cash</h3>
-                    <p>Spend 💵 to improve your farm's efficiency.</p>
+                <div class="card" id="upgrades-cow-cash">
+                    <h3>Cow Cash Upgrades</h3>
+                    <p style="margin-bottom: 20px; color: var(--text-muted);">Invest your hard-earned Cow Cash into permanent improvements.</p>
                     <div class="upgrades-grid-container" id="cow-cash-upgrades-container">
                         <!-- Upgrades injected via JS -->
                     </div>
                 </div>
-                 <hr id="upgrades-factory-hr" class="subsection-hr-locked" data-unlock-condition="cows:4">
             </div>
 
             <!-- Factory Tab -->
             <div id="tab-factory" class="tab-pane">
-                <h2>Factory</h2>
-                <div id="factory-fresh">
-                    <h3>Fresh Factory</h3>
-                    <p>Process normal milk into cheese here.</p>
-                </div>
-                 <hr id="factory-premium-hr" class="subsection-hr-locked" data-unlock-condition="cows:7">
-                <div id="factory-premium-production" class="subsection-locked" data-unlock-condition="cows:7">
-                    <span class="unlock-info subsection-unlock-info">Requires 7 Cows (Ripe Milk)</span>
-                    <h3>Premium Production</h3>
-                    <p>Process ripe milk into premium cheese here.</p>
+                <h2>Industrial Complex</h2>
+                <div class="game-grid">
+                    <div class="card" id="factory-fresh">
+                        <h3>Fresh Factory</h3>
+                        <p>Automated cheese production lines.</p>
+                    </div>
+                    <div id="factory-premium-production" class="subsection-locked" data-unlock-condition="cows:7">
+                        <span class="unlock-info subsection-unlock-info">Requires 7 Cows (Ripe Milk)</span>
+                        <div class="card">
+                            <h3>Premium Production</h3>
+                            <p>High-end dairy processing.</p>
+                        </div>
+                    </div>
                 </div>
             </div>
 
             <!-- Settings Tab -->
             <div id="tab-settings" class="tab-pane">
                 <h2>Settings</h2>
-                
-                <div class="button-group">
-                    <button id="btn-save" class="action">💾 Save Game</button>
-                    <button id="btn-load" class="action">📂 Load Game</button>
-                    <button id="btn-toggle-autosave" class="action">🔄 Enable Autosave (30s)</button>
-                    <button id="btn-delete-progress" class="action danger-button">🗑️ Delete Progress</button>
+                <div class="card">
+                    <h3>Game Management</h3>
+                    <div class="button-group">
+                        <button id="btn-save" class="action">💾 Save Game</button>
+                        <button id="btn-load" class="action secondary">📂 Load Game</button>
+                        <button id="btn-toggle-autosave" class="action secondary">🔄 Enable Autosave (30s)</button>
+                        <button id="btn-delete-progress" class="action danger-button">🗑️ Delete Progress</button>
+                    </div>
+                    <div id="save-info" class="save-info"></div>
                 </div>
-                
-                <div id="save-info" class="save-info"></div>
             </div>
             
             <!-- Changelog Tab -->
             <div id="tab-changelog" class="tab-pane">
                 <h2>Changelog</h2>
-
-                <div class="changelog-version">
-                    <p> 15 Jan 2026</p>
-                    <h3>Version 0.3.6: Bugfixes & balancing</h3>
-                    <ul>
-                        <li>🛠️ Various bugfixes</li>
-                        <li>🛠️ Various balance changes</li>
-                    </ul>
+                <div class="card">
+                    <div class="changelog-version">
+                        <p> 19 Feb 2026</p>
+                        <h3>Version 0.3.7: Visual Upgrade</h3>
+                        <ul style="padding-left: 20px;">
+                            <li>➕ Games looks much better now</li>
+                        </ul>
+                    </div>
                 </div>
 
-                <div class="changelog-version">
-                    <p> 13 Jan 2026</p>
-                    <h3>Version 0.3.5: Simplified Gameplay</h3>
-                    <ul>
-                        <li>➕ Milk moms give more gold</li>
-                        <li>🟰 Changed taps needed per cycle</li>
-                        <li>🟰 Changed tap upgrade costs</li>
-                        <li>🛠️ Removed playstyle selection</li>
-                        <li>🛠️ Tap strength is now 1 by default</li>
-                        <li>🛠️ Auto-tap is now 4/s by default</li>
-                        
-                    </ul>
+                <div class="card">
+                    <div class="changelog-version">
+                        <p> 15 Jan 2026</p>
+                        <h3>Version 0.3.6: Bugfixes & balancing</h3>
+                        <ul style="padding-left: 20px;">
+                            <li>🛠️ Various bugfixes</li>
+                            <li>🛠️ Various balance changes</li>
+                        </ul>
+                    </div>
                 </div>
 
-                <div class="changelog-version">
-                    <p> 31 Dec 2025</p>
-                    <h3>Version 0.3.4: User Experience</h3>
-                    <ul>
-                        <li>🛠️ Implemented Save and Load system</li>
-                        <li>🛠️ Tab buttons now display useful information</li>
-                        <li>🛠️ Emojis now work properly on all platforms</li>
-                        <li>🛠️ Tab buttons are now mobile friendly</li>
-                    </ul>
+                <div class="card">
+                    <div class="changelog-version">
+                        <p> 13 Jan 2026</p>
+                        <h3>Version 0.3.5: Simplified Gameplay</h3>
+                        <ul style="padding-left: 20px;">
+                            <li>➕ Milk moms give more gold</li>
+                            <li>🟰 Changed taps needed per cycle</li>
+                            <li>🟰 Changed tap upgrade costs</li>
+                            <li>🛠️ Removed playstyle selection</li>
+                            <li>🛠️ Tap strength is now 1 by default</li>
+                            <li>🛠️ Auto-tap is now 4/s by default</li>
+
+                        </ul>
+                    </div>
                 </div>
 
-                <div class="changelog-version">
-                    <p> 12 Dec 2025</p>
-                    <h3>Version 0.3.3: Emoji Update🤯</h3>
-                    <ul>
-                        <li>🛠️ Added emojis to make the game look better</li>
-                        <li>🛠️ Improved Milk Market appearance</li>
-                    </ul>
+                <div class="card">
+                    <div class="changelog-version">
+                        <p> 31 Dec 2025</p>
+                        <h3>Version 0.3.4: User Experience</h3>
+                        <ul style="padding-left: 20px;">
+                            <li>🛠️ Implemented Save and Load system</li>
+                            <li>🛠️ Tab buttons now display useful information</li>
+                            <li>🛠️ Emojis now work properly on all platforms</li>
+                            <li>🛠️ Tab buttons are now mobile friendly</li>
+                        </ul>
+                    </div>
                 </div>
 
-                <div class="changelog-version">
-                    <p> 9 Dec 2025</p>
-                    <h3>Version 0.3.2: Code Refactor</h3>
-                    <ul>
-                        <li>➕ Milk Market waiting times improved again</li>
-                        <li>🛠️ Codebase completely refactored</li>
-                    </ul>
+                <div class="card">
+                    <div class="changelog-version">
+                        <p> 12 Dec 2025</p>
+                        <h3>Version 0.3.3: Emoji Update🤯</h3>
+                        <ul style="padding-left: 20px;">
+                            <li>🛠️ Added emojis to make the game look better</li>
+                            <li>🛠️ Improved Milk Market appearance</li>
+                        </ul>
+                    </div>
                 </div>
 
-                <div class="changelog-version">
-                    <p> 26 Apr 2025</p>
-                    <h3>Version 0.3.1: Balancing and Bugfixes</h3>
-                    <ul>
-                        <li>🆕 Unlock "Process All" unlocking the Factory</li>
-                        <li>➕ Milk Market customer generation improved</li>
-                        <li>➕ Dairy Dads milk amount scaling less random</li>
-                        <li>➖ Milk Mom reward scaling decreased</li>
-                        <li>🛠️ Auto-Tap now works properly in active playstyle</li>
-                        <li>🛠️ Subsection now unlock at the correct moment</li>
-                    </ul>
+                <div class="card">
+                    <div class="changelog-version">
+                        <p> 9 Dec 2025</p>
+                        <h3>Version 0.3.2: Code Refactor</h3>
+                        <ul style="padding-left: 20px;">
+                            <li>➕ Milk Market waiting times improved again</li>
+                            <li>🛠️ Codebase completely refactored</li>
+                        </ul>
+                    </div>
                 </div>
 
-                <div class="changelog-version">
-                    <p> 25 Apr 2025</p>
-                    <h3>Version 0.3.0: Cow Cash Upgrades</h3>
-                    <ul>
-                        <li>🆕 Cow Cash Upgrades</li>
-                        <li>🆕 The ability to choose a playstyle</li>
-                        <li>➕ Dairy Dads milk amount scaling less random</li>
-                        <li>➕ Dairy Dads rewards now scale</li>
-                        <li>➕ Decreased customer wait time</li>
-                        <li>🟰 Dairy Dads appear more often</li>
-                        <li>➖ Increased Unlock Requirements</li>
-                        <li>🛠️ "Sell x Milk" button now works properly</li>
-                    </ul>
+                <div class="card">
+                    <div class="changelog-version">
+                        <p> 26 Apr 2025</p>
+                        <h3>Version 0.3.1: Balancing and Bugfixes</h3>
+                        <ul style="padding-left: 20px;">
+                            <li>🆕 Unlock "Process All" unlocking the Factory</li>
+                            <li>➕ Milk Market customer generation improved</li>
+                            <li>➕ Dairy Dads milk amount scaling less random</li>
+                            <li>➖ Milk Mom reward scaling decreased</li>
+                            <li>🛠️ Auto-Tap now works properly in active playstyle</li>
+                            <li>🛠️ Subsection now unlock at the correct moment</li>
+                        </ul>
+                    </div>
                 </div>
 
-                <div class="changelog-version">
-                    <p> 23 Apr 2025</p>
-                    <h3>Version 0.2.1: Balance Changes</h3>
-                    <ul>
-                        <li>➕ Decreased customer wait time</li>
-                        <li>➕ Dairy Dads now also give a bit of Gold</li>
-                        <li>➕ Doubled Auto-Tap speed again</li>
-                    </ul>
+                <div class="card">
+                    <div class="changelog-version">
+                        <p> 25 Apr 2025</p>
+                        <h3>Version 0.3.0: Cow Cash Upgrades</h3>
+                        <ul style="padding-left: 20px;">
+                            <li>🆕 Cow Cash Upgrades</li>
+                            <li>🆕 The ability to choose a playstyle</li>
+                            <li>➕ Dairy Dads milk amount scaling less random</li>
+                            <li>➕ Dairy Dads rewards now scale</li>
+                            <li>➕ Decreased customer wait time</li>
+                            <li>🟰 Dairy Dads appear more often</li>
+                            <li>➖ Increased Unlock Requirements</li>
+                            <li>🛠️ "Sell x Milk" button now works properly</li>
+                        </ul>
+                    </div>
                 </div>
 
-                <div class="changelog-version">
-                    <p> 23 Apr 2025</p>
-                    <h3>Version 0.2.0: Milk Market</h3>
-                    <ul>
-                        <li>🆕 the Milk Market</li>
-                        <li>🆕 Milk Moms</li>
-                        <li>🆕 Dairy Dads</li>
-                        <li>➕ Doubled Auto-Tap speed</li>
-                    </ul>
-                </div>
-    
-                <div class="changelog-version">
-                    <p> 23 Apr 2025</p> 
-                    <h3>Version 0.1.4: Changelog & Balancing</h3>
-                    <ul>
-                        <li>🆕 Added Changelog tab</li>
-                        <li>➕ Lowered Cow cost to 25</li>
-                        <li>➕ Lowered Milk required to unlock Business tab to 2</li>
-                        <li>➖Increased Raw Milk cost to 20</li>
-                    </ul>
-                </div>
-    
-                 <div class="changelog-version">
-                    <p> 23 Apr 2025</p>
-                    <h3>Version 0.1.3: Auto Tap</h3>
-                    <ul>
-                        <li>🆕 Auto-Tap toggle button</li>
-                    </ul>
-                </div>
-    
-                 <div class="changelog-version">
-                    <p> 23 Apr 2025</p>
-                    <h3>Version 0.1.2: Unlockables II</h3>
-                    <ul>
-                        <li>🛠️ Simplified unlockables code</li>
-                        <li>🛠️ Changed locked item's visuals</li>
-                    </ul>
+                <div class="card">
+                    <div class="changelog-version">
+                        <p> 23 Apr 2025</p>
+                        <h3>Version 0.2.1: Balance Changes</h3>
+                        <ul style="padding-left: 20px;">
+                            <li>➕ Decreased customer wait time</li>
+                            <li>➕ Dairy Dads now also give a bit of Gold</li>
+                            <li>➕ Doubled Auto-Tap speed again</li>
+                        </ul>
+                    </div>
                 </div>
 
-                <div class="changelog-version">
-                    <p> 23 Apr 2025</p>
-                    <h3>Version 0.1.1: Unlockables</h3>
-                    <ul>
-                        <li>🆕 Tabs are now unlockable</li>
-                        <li>🆕 Subsections are now unlockable</li>
-                    </ul>
+                <div class="card">
+                    <div class="changelog-version">
+                        <p> 23 Apr 2025</p>
+                        <h3>Version 0.2.0: Milk Market</h3>
+                        <ul style="padding-left: 20px;">
+                            <li>🆕 the Milk Market</li>
+                            <li>🆕 Milk Moms</li>
+                            <li>🆕 Dairy Dads</li>
+                            <li>➕ Doubled Auto-Tap speed</li>
+                        </ul>
+                    </div>
                 </div>
 
-                <div class="changelog-version">
-                    <p> 22 Apr 2025</p>
-                    <h3>Version 0.1: First Release</h3>
-                    <ul>
-                        <li>🆕 Tabs are added.</li>
-                        <li>🆕 Basic functionality is added</li>
-                        <li>🆕 Basic visuals are added</li>
-                        <li>🆕 Cows can be bought</li>
-                        <li>🆕 Raw milk can be gained</li>
-                        <li>🆕 Milk can be processed</li>
-                    </ul>
+                <div class="card">
+                    <div class="changelog-version">
+                        <p> 23 Apr 2025</p>
+                        <h3>Version 0.1.4: Changelog & Balancing</h3>
+                        <ul style="padding-left: 20px;">
+                            <li>🆕 Added Changelog tab</li>
+                            <li>➕ Lowered Cow cost to 25</li>
+                            <li>➕ Lowered Milk required to unlock Business tab to 2</li>
+                            <li>➖Increased Raw Milk cost to 20</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="changelog-version">
+                        <p> 23 Apr 2025</p>
+                        <h3>Version 0.1.3: Auto Tap</h3>
+                        <ul style="padding-left: 20px;">
+                            <li>🆕 Auto-Tap toggle button</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="changelog-version">
+                        <p> 23 Apr 2025</p>
+                        <h3>Version 0.1.2: Unlockables II</h3>
+                        <ul style="padding-left: 20px;">
+                            <li>🛠️ Simplified unlockables code</li>
+                            <li>🛠️ Changed locked item's visuals</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="changelog-version">
+                        <p> 23 Apr 2025</p>
+                        <h3>Version 0.1.1: Unlockables</h3>
+                        <ul style="padding-left: 20px;">
+                            <li>🆕 Tabs are now unlockable</li>
+                            <li>🆕 Subsections are now unlockable</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="changelog-version">
+                        <p> 22 Apr 2025</p>
+                        <h3>Version 0.1: First Release</h3>
+                        <ul style="padding-left: 20px;">
+                            <li>🆕 Tabs are added.</li>
+                            <li>🆕 Basic functionality is added</li>
+                            <li>🆕 Basic visuals are added</li>
+                            <li>🆕 Cows can be bought</li>
+                            <li>🆕 Raw milk can be gained</li>
+                            <li>🆕 Milk can be processed</li>
+                        </ul>
+                    </div>
                 </div>
             </div>
-            
         </main>
 
         <footer class="game-footer">
             <p>Yaysmina</p>
-            <p>Version 0.3.6 - Bugfixes & balancing</p>
-            <p>15 Jan 2026</p>
+            <p>Version 0.3.7 - Visual Upgrade</p>
+            <p>19 Feb 2026</p>
         </footer>
     </div>
-    <!-- Point to the module -->
     <script type="module" src="./src/main.js"></script>
 </body>
 </html>

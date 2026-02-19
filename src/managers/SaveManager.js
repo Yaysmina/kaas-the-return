@@ -1,6 +1,7 @@
 import { state } from '../core/GameState.js';
 import { COSTS, PRODUCTION } from '../core/Constants.js';
 import { UpgradeManager } from './UpgradeManager.js';
+import { parseEmojis } from '../core/EmojiUtils.js';
 
 const SAVE_KEY = 'kaas-the-return-save';
 const AUTOSAVE_INTERVAL = 30000; // 30 seconds
@@ -260,7 +261,7 @@ export class SaveManager {
 
         this.autosaveIntervalId = setInterval(() => {
             if (this.save()) {
-                this.showNotification('💾');
+                this.showNotification('💾 Autosaved');
                 // Update save info display if callback is set
                 if (this.updateSaveInfoCallback) {
                     this.updateSaveInfoCallback();
@@ -292,7 +293,7 @@ export class SaveManager {
     /**
      * Shows a temporary notification to the user
      */
-    static showNotification(message, duration = 2000) {
+    static showNotification(message, duration = 2500) {
         // Remove existing notification if any
         const existing = document.getElementById('save-notification');
         if (existing) {
@@ -303,16 +304,22 @@ export class SaveManager {
         const notification = document.createElement('div');
         notification.id = 'save-notification';
         notification.className = 'save-notification';
-        notification.textContent = message;
+        notification.innerHTML = `<span>${message}</span>`;
+        
+        // Ensure emojis are parsed
+        parseEmojis(notification);
+        
         document.body.appendChild(notification);
 
         // Trigger animation
-        setTimeout(() => notification.classList.add('show'), 10);
+        requestAnimationFrame(() => {
+            notification.classList.add('show');
+        });
 
         // Remove after duration
         setTimeout(() => {
             notification.classList.remove('show');
-            setTimeout(() => notification.remove(), 300);
+            setTimeout(() => notification.remove(), 400);
         }, duration);
     }
 }
